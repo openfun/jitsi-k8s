@@ -1,0 +1,21 @@
+# OVH Openstack environment
+OS_PROJECT_ID=
+OS_PROJECT_NAME=
+OS_USERNAME=
+OS_PASSWORD=
+OS_REGION_NAME=GRA
+OS_AUTH_URL=https://auth.cloud.ovh.net/v3
+OS_USER_DOMAIN_NAME=Default
+OS_PROJECT_DOMAIN_ID=default
+OS_INTERFACE=public
+OS_IDENTITY_API_VERSION=3
+
+# OVH credentials
+# These keys can be generated here :
+# https://api.ovh.com/createToken/?GET=/*&POST=/*&PUT=/*&DELETE=/*
+OVH_APPLICATION_KEY=
+OVH_APPLICATION_SECRET=
+OVH_CONSUMER_KEY=
+
+# OVH project id
+OVH_CLOUD_PROJECT_SERVICE=
