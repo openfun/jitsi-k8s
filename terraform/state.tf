@@ -6,6 +6,11 @@ terraform {
       version = "1.42.0"
     }
 
+    helm = {
+      source = "hashicorp/helm"
+      version = "2.1.2"
+    }
+
     local = {
       source = "hashicorp/local"
       version = "2.1.0"

@@ -15,6 +15,10 @@ services:
     env_file: env.d/terraform
     user: ${DOCKER_USER:-1000}
     working_dir: /app
+    environment:
+      # Without this value, the Helm provider fails to fetch chart repository data
+      - XDG_CACHE_HOME=/tmp
+      #
     volumes:
       - ./terraform:/app
 
