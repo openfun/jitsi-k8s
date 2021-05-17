@@ -17,3 +17,9 @@ services:
     working_dir: /app
     volumes:
       - ./terraform:/app
+
+  kubectl:
+    image: bitnami/kubectl:latest
+    user: ${DOCKER_USER:-1000}
+    volumes:
+      - ./terraform/.kubeconfig:/.kube/config
