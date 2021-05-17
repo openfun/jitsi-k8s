@@ -2,6 +2,10 @@
 resource "ovh_cloud_project_kube" "kube_cluster" {
    name         = var.k8s_cluster_name
    region       = var.k8s_cluster_region
+
+   lifecycle {
+      ignore_changes = [ version ]
+   }
 }
 
 resource "ovh_cloud_project_kube_nodepool" "kube_nodepool" {
