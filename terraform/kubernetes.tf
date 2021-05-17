@@ -20,4 +20,15 @@ resource "ovh_cloud_project_kube_nodepool" "kube_nodepool" {
       ignore_changes = [ desired_nodes ]
    }
 }
+
+output "kubeconfig" {
+   value = ovh_cloud_project_kube.kube_cluster.kubeconfig
+   sensitive = true
+   description = "The kube config file to use to connect to the cluster"
+}
+
+resource "local_file" "kubeconfig" {
+   sensitive_content = ovh_cloud_project_kube.kube_cluster.kubeconfig
+   filename = "${path.module}/.kubeconfig"
+   file_permission = "0600"
 }

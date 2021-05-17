@@ -5,3 +5,7 @@ provider "openstack" {
 provider "ovh" {
   endpoint           = var.ovh_endpoint
 }
+
+provider "local" {
+
+}

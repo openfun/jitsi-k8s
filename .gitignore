@@ -4,3 +4,6 @@ env.d/terraform
 .terraform
 *.tfstate
 *.tfstate.backup
+
+# Generated Kubernetes configuration file
+.kubeconfig
