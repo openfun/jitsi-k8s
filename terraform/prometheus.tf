@@ -20,3 +20,25 @@ resource "helm_release" "prometheus-adapter" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart = "prometheus-adapter"
 }
+
+# Install Kube-eagle with helm to have a practical Grafana dashboard
+# to watch K8s resources usage.
+# https://github.com/cloudworkz/kube-eagle-helm-chart
+# Grafana dashboard to import : https://grafana.com/grafana/dashboards/9871
+
+resource "helm_release" "kube-eagle" {
+  name = "kube-eagle"
+
+  repository = "https://raw.githubusercontent.com/cloudworkz/kube-eagle-helm-chart/master"
+  chart = "kube-eagle"
+
+  set {
+    name = "serviceMonitor.create"
+    value = true
+  }
+
+  set {
+    name = "serviceMonitor.releaseLabel"
+    value = "kube-prometheus-stack"
+  }
+}
