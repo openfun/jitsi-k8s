@@ -11,4 +11,9 @@ resource "ovh_cloud_project_kube_nodepool" "kube_nodepool" {
    max_nodes     = var.k8s_nodepool_max_nodes
    min_nodes     = var.k8s_nodepool_min_nodes
    autoscale     = var.k8s_nodepool_autoscale
+
+   lifecycle {
+      ignore_changes = [ desired_nodes ]
+   }
+}
 }
