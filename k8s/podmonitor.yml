@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: jibri-monitor
+  labels:
+    app: jibri
+    # The following label is required so the Prometheus operator include it
+    # in its scrapped metrics.
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: jibri
+  podMetricsEndpoints:
+  - port: exporter

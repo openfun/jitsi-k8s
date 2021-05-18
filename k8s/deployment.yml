@@ -71,6 +71,23 @@ spec:
           mountPath: /dev/shm
         - name: jibri-config
           mountPath: /config
+      - image: prayagsingh/prometheus-jibri-exporter:1.3.0
+        name: exporter
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /metrics
+            port: 9889
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 9889
+          name: exporter
+          protocol: TCP
       restartPolicy: Always
       securityContext: {}
       volumes:
