@@ -1,4 +1,6 @@
 env.d/terraform
+env.d/jitsi
+env.d/jitsi-secrets
 
 # Terraform
 .terraform

@@ -33,7 +33,7 @@ variable "k8s_nodepool_autoscale" {
 variable "k8s_nodepool_flavor" {
   type = string
   description = "Flavor name of the instances that will be created for the node pool"
-  default = "b2-7"
+  default = "b2-15"
 }
 
 variable "k8s_nodepool_min_nodes" {

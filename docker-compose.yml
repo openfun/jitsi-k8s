@@ -27,3 +27,11 @@ services:
     user: ${DOCKER_USER:-1000}
     volumes:
       - ./terraform/.kubeconfig:/.kube/config
+
+  kustomize:
+    image: k8s.gcr.io/kustomize/kustomize:v3.8.7
+    user: ${DOCKER_USER:-1000}
+    volumes:
+      - ./k8s:/data/k8s
+      - ./env.d/jitsi:/data/env.d/jitsi
+      - ./env.d/jitsi-secrets:/data/env.d/jitsi-secrets
