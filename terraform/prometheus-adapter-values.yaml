@@ -1,0 +1,61 @@
+prometheus:
+  url: http://prometheus-operated.default.svc
+  port: 9090
+  path: ""
+rules:
+  default: false
+  # The following rules define which prometheus metrics we want to expose
+  # through Kubernetes custom metrics API. For more information, see :
+  # https://github.com/kubernetes-sigs/prometheus-adapter/blob/master/docs/config.md
+  custom:
+  # The jibri_busy custom metric indicates if a jibri pod is busy (1) or not (0).
+  # It can be queried manually with :
+  # bin/kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/jibri/pods/*/jibri_busy
+  # (value per pod in the jibri namespace)
+  # bin/kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/jibri/metrics/jibri_busy
+  # (aggregated value for the whole jibri namespace)
+  - seriesQuery: '{__name__="jibri_busystatus"}'
+    resources:
+      overrides:
+        namespace:
+          resource: namespace
+        pod:
+          resource: pod
+    name:
+      as: "jibri_busy"
+    metricsQuery: sum(jibri_busystatus{<<.LabelMatchers>>}) by (<<.GroupBy>>)
+  # The jibri_available custom metric indicates if a jibri pod is available to
+  # handle a recording session.
+  # It can be queried manually with :
+  # bin/kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/jibri/pods/*/jibri_available
+  # (value per pod in the jibri namespace)
+  # bin/kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/jibri/metrics/jibri_available
+  # (aggregated value for the whole jibri namespace)
+  - seriesQuery: '{__name__="jibri_busystatus"}'
+    resources:
+      overrides:
+        namespace:
+          resource: namespace
+        pod:
+          resource: pod
+    name:
+      as: "jibri_available"
+    metricsQuery: sum(1 - jibri_busystatus{<<.LabelMatchers>>}) by (<<.GroupBy>>)
+  # The jibri_available_inverted metric is the same than jibri_available, but inverted.
+  # I.e. jibri_available_inverted = 1 / jibri_available
+  # This metric is defined to be used in HPA, in order to scale jibri deployment in the right direction.
+  # If you use jibri_available metric instead, HPA would scale up resources instead of scaling down.
+  #
+  # See HPA algorithm here :
+  # https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#algorithm-details
+  # The formula applied by HPA is : desiredReplicas = ceil[currentReplicas * ( currentMetricValue / desiredMetricValue )]
+  - seriesQuery: '{__name__="jibri_busystatus"}'
+    resources:
+      overrides:
+        namespace:
+          resource: namespace
+        pod:
+          resource: pod
+    name:
+      as: "jibri_available_inverted"
+    metricsQuery: 1 / sum(1 - jibri_busystatus{<<.LabelMatchers>>}) by (<<.GroupBy>>)

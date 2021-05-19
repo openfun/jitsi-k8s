@@ -22,6 +22,9 @@ resource "helm_release" "prometheus-adapter" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart = "prometheus-adapter"
 
+  # Use an external file to configure the adapter, because its syntax is quite complex.
+  values = ["${file("prometheus-adapter-values.yaml")}"]
+
   depends_on = [ helm_release.kube-prometheus-stack ]
 }
 

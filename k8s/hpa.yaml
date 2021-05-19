@@ -1,0 +1,100 @@
+# With this Horizontal Pod Autoscaler, we want to ensure that there is
+# always at least:
+#  - a specific count of jibri pods available (TARGET_MIN_VALUE)
+#  - a specific percentage of jibri pods available across all jibri pods (TARGET_PERCENT)
+#
+# The formula applied by HPA to compute the desired replicas is :
+# desiredReplicas = ceil[currentReplicas * ( currentMetricValue / desiredMetricValue )]
+# (see https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#algorithm-details)
+#
+# If multiple metrics are specified in HPA, the formula is applied for each of them and the
+# higher desiredReplicas is taken into account.
+#
+# In our case, we will specify 2 metrics (or rules) :
+# - one to ensure that we have at least a specific number of pods available (TARGET_MIN_VALUE)
+# - one to ensure that we have a certain percentage of available pods (TARGET_PERCENT)
+#
+# -- Notes about TARGET_MIN_VALUE
+#
+# This rule is tricky because if we use the raw number of available jibri instances as a metric,
+# HPA would scale in the wrong direction.
+#
+# Example:
+# - TARGET_MIN_VALUE = 2 (we want to have 2 jibri pods available)
+# - 12 jibri pods are running
+# - 10 jibri pods are available
+# - 2 jibri pods are busy.
+#
+# We use the number of available jibri as the metric, in this case:
+# - currentMetricValue = 10
+# - desiredMetricValue = 2
+#
+# If we apply the HPA formula:
+# desiredReplicas = ceil(12 * (10 / 2)) = 60
+#
+# HPA would like to scale up (to 60 pods!) instead of scaling down.
+#
+#
+# To invert this behavior, we can invert the metrics values:
+# - currentMetricValue = 1/10
+# - desiredMetricValue = 1/2
+#
+# If we apply the HPA formula with these metrics instead :
+# desiredReplicas = ceil(12 * ((1/10) / (1/2))) = 3
+#
+# It would scale in the right direction and adjust until it matches the target.
+#
+# All of this to explain that :
+# - We use `jibri_available_inverted` as a metric
+# - The target value is defined as (1 / TARGET_MIN_VALUE)
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: jibri-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: jibri
+  minReplicas: 2
+  maxReplicas: 10
+  behavior:
+    # We'll allow to scale down 20% of the pods every 30s
+    scaleDown:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 20
+          periodSeconds: 30
+    # We allow to add 2 pods every 2 minutes.
+    # FIXME: Adjust this value when cluster autoscaler is enabled.
+    # It should give enough time to provision new nodes, but not too much
+    # to be able to scale-up in case of high demand.
+    scaleUp:
+      policies:
+        - type: Pods
+          value: 2
+          periodSeconds: 120
+  metrics:
+    - type: Object
+      object:
+        metric:
+          name: jibri_available_inverted
+        describedObject:
+          apiVersion: v1
+          kind: Namespace
+          name: jibri
+        target:
+          type: Value
+          # We want to always have 2 available jibri instances.
+          # So we declare 1/2 = 0.5
+          value: 0.5
+    - type: Pods
+      pods:
+        metric:
+          name: jibri_busy
+        target:
+          type: AverageValue
+          # We want to always have 20% of available jibri instances.
+          averageValue: 0.8

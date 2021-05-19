@@ -13,3 +13,4 @@ resources:
   - deployment.yml
   - namespace.yml
   - podmonitor.yml
+  - hpa.yaml
