@@ -7,6 +7,8 @@ resource "helm_release" "kube-prometheus-stack" {
 
   repository = "https://prometheus-community.github.io/helm-charts"
   chart = "kube-prometheus-stack"
+
+  depends_on = [ ovh_cloud_project_kube_nodepool.kube_nodepool, local_file.kubeconfig]
 }
 
 
@@ -19,6 +21,8 @@ resource "helm_release" "prometheus-adapter" {
 
   repository = "https://prometheus-community.github.io/helm-charts"
   chart = "prometheus-adapter"
+
+  depends_on = [ helm_release.kube-prometheus-stack ]
 }
 
 # Install Kube-eagle with helm to have a practical Grafana dashboard
@@ -41,4 +45,6 @@ resource "helm_release" "kube-eagle" {
     name = "serviceMonitor.releaseLabel"
     value = "kube-prometheus-stack"
   }
+
+  depends_on = [ helm_release.kube-prometheus-stack ]
 }
