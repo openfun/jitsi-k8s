@@ -19,6 +19,7 @@ spec:
       labels:
         app: jibri
     spec:
+      serviceAccountName: jibri
       containers:
       - image: fundocker/jibri-pulseaudio:main
         name: jibri
@@ -88,6 +89,13 @@ spec:
         - containerPort: 9889
           name: exporter
           protocol: TCP
+      - image: python:3.8
+        name: jibri-deletion-cost-updater
+        command: [ "python3" ]
+        args: [ "/opt/jibri-deletion-cost-updater/jibri-deletion-cost-updater.py" ]
+        volumeMounts:
+        - name: jibri-deletion-cost-updater
+          mountPath: /opt/jibri-deletion-cost-updater
       restartPolicy: Always
       securityContext: {}
       volumes:
@@ -96,3 +104,6 @@ spec:
           path: /dev/shm
       - name: jibri-config
         emptyDir: {}
+      - name: jibri-deletion-cost-updater
+        configMap:
+          name: jibri-deletion-cost-updater

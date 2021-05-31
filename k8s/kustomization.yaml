@@ -4,6 +4,9 @@ configMapGenerator:
   - name: jitsi-config
     envs:
       - ../env.d/jitsi
+  - name: jibri-deletion-cost-updater
+    files:
+      - ./jibri-deletion-cost-updater.py
 namespace: jibri
 secretGenerator:
   - name: jitsi-secrets
@@ -14,3 +17,4 @@ resources:
   - namespace.yml
   - podmonitor.yml
   - hpa.yaml
+  - service-account.yaml
