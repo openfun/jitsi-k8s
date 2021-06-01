@@ -66,6 +66,11 @@ def update_pod_annotation(annotation, value):
 
 
 def get_pod_deletion_cost(status):
+    """
+    Given a jibri status, this function returns an integer value representing the cost of
+    deleting this pod. Pods with lower deletion cost are preferred to be deleted before
+    pods with higher deletion cost.
+    """
     if status == "BUSY":
         return 10000
     return 0
