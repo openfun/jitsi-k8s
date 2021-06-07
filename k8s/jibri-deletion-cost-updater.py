@@ -15,6 +15,8 @@ from ssl import create_default_context
 from urllib import request
 
 # Time to wait between each jibri status check
+from urllib.error import HTTPError, URLError
+
 update_period_seconds = os.getenv("UPDATE_PERIOD_SECONDS", 5)
 
 # -- Jibri
@@ -41,11 +43,17 @@ bearer = open(f"{service_account_directory}/token", "r").read()
 namespace = open(f"{service_account_directory}/namespace", "r").read()
 pod_name = os.getenv("HOSTNAME")
 
+STATUS_BUSY = "BUSY"
+STATUS_IDLE = "IDLE"
+STATUS_UNKNOWN = "UNKNOWN"
+
 
 def get_jibri_status():
     """Call Jibri's Health API and return its busy status (BUSY, IDLE or UNKNOWN)."""
     response = request.urlopen(jibri_health_api)
-    return json.load(response).get("status", {}).get("busyStatus", "UNKNOWN")
+    if response.getcode() != 200:
+        raise HTTPError(jibri_health_api, response.getcode(), "Unexpected response code", {}, None)
+    return json.load(response).get("status", {}).get("busyStatus", STATUS_UNKNOWN)
 
 
 def update_pod_annotation(annotation, value):
@@ -62,7 +70,9 @@ def update_pod_annotation(annotation, value):
     patch_request = request.Request(
         url, data=json_patch.encode(), headers=headers, method="PATCH"
     )
-    request.urlopen(patch_request, context=ssl_context)
+    response = request.urlopen(patch_request, context=ssl_context)
+    if response.getcode() != 200:
+        raise HTTPError(jibri_health_api, response.getcode(), "Unexpected response code", headers, None)
 
 
 def get_pod_deletion_cost(status):
@@ -71,7 +81,7 @@ def get_pod_deletion_cost(status):
     deleting this pod. Pods with lower deletion cost are preferred to be deleted before
     pods with higher deletion cost.
     """
-    if status == "BUSY":
+    if status == STATUS_BUSY:
         return 10000
     return 0
 
@@ -85,13 +95,21 @@ logging.basicConfig(
 jibri_status = ""
 
 while True:
-    new_jibri_status = get_jibri_status()
+    try:
+        new_jibri_status = get_jibri_status()
+    except (URLError, HTTPError):
+        logging.exception("Unable to get the jibri status")
+        new_jibri_status = STATUS_UNKNOWN
+
     if new_jibri_status != jibri_status:
         logging.info("Jibri's status changed to : %s", new_jibri_status)
         deletion_cost = get_pod_deletion_cost(new_jibri_status)
-        update_pod_annotation(
-            "controller.kubernetes.io/pod-deletion-cost", deletion_cost
-        )
-        logging.info("pod-deletion-cost annotation updated to %s", deletion_cost)
-        jibri_status = new_jibri_status
+        try:
+            update_pod_annotation(
+                "controller.kubernetes.io/pod-deletion-cost", deletion_cost
+            )
+            logging.info("pod-deletion-cost annotation updated to %s", deletion_cost)
+            jibri_status = new_jibri_status
+        except (FileNotFoundError, HTTPError, URLError):
+            logging.exception("Unable to update pod-deletion-cost annotation")
     time.sleep(update_period_seconds)
