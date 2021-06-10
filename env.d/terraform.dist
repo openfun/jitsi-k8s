@@ -17,5 +17,9 @@ OVH_APPLICATION_KEY=
 OVH_APPLICATION_SECRET=
 OVH_CONSUMER_KEY=
 
-# OVH project id
+# OVH Cloud project id
 OVH_CLOUD_PROJECT_SERVICE=
+
+# If you want to specify a different project ID per terraform namespace,
+# you can define the following map :
+# TF_VAR_ovh_project_id={ production = "project-id-A", preprod = "project-id-B"}

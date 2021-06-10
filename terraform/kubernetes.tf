@@ -1,7 +1,8 @@
 
 resource "ovh_cloud_project_kube" "kube_cluster" {
-   name         = var.k8s_cluster_name
-   region       = var.k8s_cluster_region
+   name         = "jitsi-${terraform.workspace}"
+   region       = lookup(var.k8s_cluster_region, terraform.workspace, "GRA7")
+   service_name = lookup(var.ovh_project_id, terraform.workspace, null)
 
    lifecycle {
       ignore_changes = [ version ]
@@ -9,12 +10,13 @@ resource "ovh_cloud_project_kube" "kube_cluster" {
 }
 
 resource "ovh_cloud_project_kube_nodepool" "kube_nodepool" {
+   autoscale     = lookup(var.k8s_nodepool_autoscale, terraform.workspace, false)
+   flavor_name   = lookup(var.k8s_nodepool_flavor, terraform.workspace, "b2-15")
    kube_id       = ovh_cloud_project_kube.kube_cluster.id
+   max_nodes     = lookup(var.k8s_nodepool_max_nodes, terraform.workspace, 1)
+   min_nodes     = lookup(var.k8s_nodepool_min_nodes, terraform.workspace, 1)
    name          = "jitsipool"
-   flavor_name   = var.k8s_nodepool_flavor
-   max_nodes     = var.k8s_nodepool_max_nodes
-   min_nodes     = var.k8s_nodepool_min_nodes
-   autoscale     = var.k8s_nodepool_autoscale
+   service_name  = lookup(var.ovh_project_id, terraform.workspace, null)
 
    lifecycle {
       ignore_changes = [ desired_nodes ]
