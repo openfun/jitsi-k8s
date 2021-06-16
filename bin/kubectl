@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-set -eo pipefail
+
+# shellcheck source=bin/_config.sh
+source "$(dirname "${BASH_SOURCE[0]}")/_utils.sh"
+
+assert_env_selected
 
 # Run kubectl commands in docker container via docker compose
 # shellcheck disable=SC2068

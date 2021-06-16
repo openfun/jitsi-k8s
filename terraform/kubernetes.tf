@@ -15,7 +15,7 @@ resource "ovh_cloud_project_kube_nodepool" "kube_nodepool" {
    kube_id       = ovh_cloud_project_kube.kube_cluster.id
    max_nodes     = lookup(var.k8s_nodepool_max_nodes, terraform.workspace, 1)
    min_nodes     = lookup(var.k8s_nodepool_min_nodes, terraform.workspace, 1)
-   name          = "jitsipool"
+   name          = "jitsipool-${terraform.workspace}"
    service_name  = lookup(var.ovh_project_id, terraform.workspace, null)
 
    lifecycle {
@@ -29,8 +29,13 @@ output "kubeconfig" {
    description = "The kube config file to use to connect to the cluster"
 }
 
+output "k8s_nodes_url" {
+   value = ovh_cloud_project_kube.kube_cluster.nodes_url
+   description = "Cluster nodes URL (DNS record that return all nodes addresses)"
+}
+
 resource "local_file" "kubeconfig" {
    sensitive_content = ovh_cloud_project_kube.kube_cluster.kubeconfig
-   filename = "${path.module}/.kubeconfig"
+   filename = "${path.module}/.kubeconfig-${terraform.workspace}"
    file_permission = "0600"
 }

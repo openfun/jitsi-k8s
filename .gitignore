@@ -1,6 +1,5 @@
 env.d/terraform
-env.d/jitsi
-env.d/jitsi-secrets
+env.d/*.env-*
 
 # Terraform
 .terraform
@@ -8,4 +7,4 @@ env.d/jitsi-secrets
 *.tfstate.backup
 
 # Generated Kubernetes configuration file
-.kubeconfig
+.kubeconfig*

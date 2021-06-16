@@ -12,6 +12,6 @@ provider "local" {
 
 provider "helm" {
   kubernetes {
-    config_path = "${path.module}/.kubeconfig"
+    config_path = "${path.module}/.kubeconfig-${terraform.workspace}"
   }
 }

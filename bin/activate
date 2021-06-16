@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+# shellcheck source=bin/_config.sh
+source "$(dirname "${BASH_SOURCE[0]}")/_utils.sh"
+
+declare prompt
+declare -a workspaces
+declare -i default=1
+declare -i choice
+declare -i n_workspaces
+
+# List environments by looking in the terraform workspaces"
+echo "Fetching workspaces list..."
+read -d '' -r -a workspaces <<< "$(
+  "$(dirname "${BASH_SOURCE[0]}")/terraform" workspace list | \
+  tr -d '[:blank:]*\r' | \
+  sort | \
+  awk 'NF' # Ignore empty lines
+)"
+n_workspaces=${#workspaces[@]}
+
+prompt="Select an available environment to activate:\\n"
+for (( i=0; i<n_workspaces; i++ )); do
+    prompt+="[$((i+1))] ${workspaces[$i]}"
+    if [[ $((i+1)) -eq ${default} ]]; then
+        prompt+=" (default)"
+    fi
+    prompt+="\\n"
+done
+prompt+="Your choice: "
+read -r -p "$(echo -e "${prompt}")" choice
+
+if [[ ${choice} -gt n_workspaces ]]; then
+    (>&2 echo "Invalid choice ${choice} (should be <= ${n_workspaces})")
+    exit 10
+fi
+
+if [[ ${choice} -le 0 ]]; then
+    choice=${default}
+fi
+
+JITSI_K8S_ENV="${workspaces[$((choice-1))]}"
+
+"$(dirname "${BASH_SOURCE[0]}")/terraform" workspace select "${JITSI_K8S_ENV}"
+
+if [[ "${BASH_SOURCE[0]}" != "${0}" ]] ; then
+    export JITSI_K8S_ENV
+else
+    echo -e "\\n# Copy/paste ${JITSI_K8S_ENV} activation command:"
+    echo "export JITSI_K8S_ENV=${JITSI_K8S_ENV}"
+fi
