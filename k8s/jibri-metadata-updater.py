@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 This script is meant to run as a sidecar-container on a jibri pod.
-It updates its pod deletion cost based on its status.
+It updates the following pod metadata based on its status :
+- the pod deletion cost annotation
+- the status label
 
 For more information on Pod deletion cost, see:
 https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#pod-deletion-cost
@@ -56,9 +58,21 @@ def get_jibri_status():
     return json.load(response).get("status", {}).get("busyStatus", STATUS_UNKNOWN)
 
 
-def update_pod_annotation(annotation, value):
-    """Call Kubernetes API to update an annotation for the current pod."""
-    json_patch = '{"metadata":{"annotations":{"%s":"%s"}}}' % (annotation, value)
+def update_pod_metadata(pod_deletion_cost, status):
+    """
+    Call Kubernetes API to update the status label and the pod deletion
+    cost annotation.
+    """
+    json_patch = json.dumps({
+        "metadata": {
+            "annotations": {
+                "controller.kubernetes.io/pod-deletion-cost": str(pod_deletion_cost)
+            },
+            "labels": {
+                "status": status
+            }
+        }
+    })
     url = f"{k8s_api}/api/v1/namespaces/{namespace}/pods/{pod_name}"
     headers = {
         "Authorization": f"Bearer {bearer}",
@@ -92,7 +106,7 @@ logging.basicConfig(
 )
 
 # This variable will contain jibri's status
-jibri_status = ""
+jibri_status = STATUS_UNKNOWN
 
 while True:
     try:
@@ -105,11 +119,11 @@ while True:
         logging.info("Jibri's status changed to : %s", new_jibri_status)
         deletion_cost = get_pod_deletion_cost(new_jibri_status)
         try:
-            update_pod_annotation(
-                "controller.kubernetes.io/pod-deletion-cost", deletion_cost
-            )
+            status_label = new_jibri_status.lower()
+            update_pod_metadata(deletion_cost, status_label)
             logging.info("pod-deletion-cost annotation updated to %s", deletion_cost)
+            logging.info("status label updated to %s", status_label)
             jibri_status = new_jibri_status
         except (FileNotFoundError, HTTPError, URLError):
-            logging.exception("Unable to update pod-deletion-cost annotation")
+            logging.exception("Unable to update pod metadata")
     time.sleep(update_period_seconds)

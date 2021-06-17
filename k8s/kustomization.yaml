@@ -4,9 +4,9 @@ configMapGenerator:
   - name: jitsi-config
     envs:
       - ../env.d/jitsi
-  - name: jibri-deletion-cost-updater
+  - name: jibri-metadata-updater
     files:
-      - ./jibri-deletion-cost-updater.py
+      - ./jibri-metadata-updater.py
 namespace: jibri
 secretGenerator:
   - name: jitsi-secrets

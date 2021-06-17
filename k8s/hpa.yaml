@@ -90,11 +90,15 @@ spec:
           # We want to always have 2 available jibri instances.
           # So we declare 1/2 = 0.5
           value: 0.5
-    - type: Pods
-      pods:
+    - type: Object
+      object:
         metric:
           name: jibri_busy
+        describedObject:
+          apiVersion: v1
+          kind: Namespace
+          name: jibri
         target:
-          type: AverageValue
+          type: Value
           # We want to always have 20% of available jibri instances.
-          averageValue: 0.8
+          value: 0.8

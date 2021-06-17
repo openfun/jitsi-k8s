@@ -8,6 +8,18 @@ spec:
   selector:
     matchLabels:
       app: jibri
+# The goal of this matchExpressions selector is to exclude the jibri
+# pods with a label status=busy from their ReplicaSet.
+# A sidecar container (metadata-updater) is updating the status
+# label according to jibri's state.
+#
+# This mechanism drastically reduces the risk of terminating
+# a busy jibri pod when scaling down the deployment.
+#
+# For more details :
+# https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#isolating-pods-from-a-replicaset
+    matchExpressions:
+      - {key: status, operator: In, values: [idle, unknown]}
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,30 +30,13 @@ spec:
       annotations:
       labels:
         app: jibri
+        status: idle
     spec:
       serviceAccountName: jibri
       containers:
       - image: fundocker/jibri-pulseaudio:main
         name: jibri
         imagePullPolicy: Always
-        lifecycle:
-          preStop:
-            exec:
-              # We don't want kubernetes to send the TERM signal to the main
-              # process of this container, because it's S6 supervisor and it
-              # will stop all services. Instead, we want to initiate a graceful
-              # shutdown of jibri, and wait until it finishes by itself.
-              # The waiting phase is important here, because when the preStop hook
-              # exits, kubernetes sends immediately a TERM signal to the container.
-              #
-              # For more details:
-              # https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks
-              # https://skarnet.org/software/s6/s6-svwait.html
-              command: [
-                 "/bin/sh",
-                 "-c",
-                 "/opt/jitsi/jibri/graceful_shutdown.sh ; s6-svwait -d /var/run/s6/services/*"
-              ]
         livenessProbe:
           failureThreshold: 5
           httpGet:
@@ -108,35 +103,20 @@ spec:
           name: exporter
           protocol: TCP
       - image: python:3.8
-        name: jibri-deletion-cost-updater
+        name: metadata-updater
         command: [ "python3" ]
-        args: [ "/opt/jibri-deletion-cost-updater/jibri-deletion-cost-updater.py" ]
+        args: [ "/opt/jibri-metadata-updater/jibri-metadata-updater.py" ]
         volumeMounts:
-        - name: jibri-deletion-cost-updater
-          mountPath: /opt/jibri-deletion-cost-updater
+        - name: jibri-metadata-updater
+          mountPath: /opt/jibri-metadata-updater
       restartPolicy: Always
       securityContext: {}
-      # When a deployment is scaled down, we cannot chose wisely which
-      # pod we want to terminate. So, when HPA scales down jibri, it might
-      # choose to terminate an active jibri instance.
-      # In this case, a graceful shutdown is initiated to inform the jibri
-      # instance to shut down when its current task is completed.
-      # Kubernetes will wait terminationGracePeriodSeconds before killing
-      # the pod with a SIGKILL.
-      #
-      # The default terminationGracePeriodSeconds is 30s.
-      # We want to define a much longer grace period to let the recording session
-      # complete.
-      #
-      # For more details, see:
-      # https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination
-      terminationGracePeriodSeconds: 86400
       volumes:
       - name: shm
         hostPath:
           path: /dev/shm
       - name: jibri-config
         emptyDir: {}
-      - name: jibri-deletion-cost-updater
+      - name: jibri-metadata-updater
         configMap:
-          name: jibri-deletion-cost-updater
+          name: jibri-metadata-updater

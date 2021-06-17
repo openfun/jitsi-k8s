@@ -12,18 +12,17 @@ rules:
   # It can be queried manually with :
   # bin/kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/jibri/pods/*/jibri_busy
   # (value per pod in the jibri namespace)
+  #
   # bin/kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/jibri/metrics/jibri_busy
-  # (aggregated value for the whole jibri namespace)
+  # (ratio of busy jibris for the whole jibri namespace)
   - seriesQuery: '{__name__="jibri_busystatus"}'
     resources:
       overrides:
         namespace:
           resource: namespace
-        pod:
-          resource: pod
     name:
       as: "jibri_busy"
-    metricsQuery: sum(jibri_busystatus{<<.LabelMatchers>>}) by (<<.GroupBy>>)
+    metricsQuery: sum(jibri_busystatus{<<.LabelMatchers>>}) by (<<.GroupBy>>) / count(jibri_busystatus{<<.LabelMatchers>>})  by (<<.GroupBy>>)
   # The jibri_available custom metric indicates if a jibri pod is available to
   # handle a recording session.
   # It can be queried manually with :
