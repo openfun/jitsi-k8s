@@ -16,9 +16,9 @@ terraform {
       version = "2.1.0"
     }
 
-    ovh = {
-      source = "ovh/ovh"
-      version = "0.13.0"
+    scaleway = {
+      source = "scaleway/scaleway"
+      version = "2.1.0"
     }
 
   }

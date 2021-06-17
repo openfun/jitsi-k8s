@@ -2,8 +2,10 @@
 provider "openstack" {
 }
 
-provider "ovh" {
-  endpoint           = var.ovh_endpoint
+provider "scaleway" {
+  access_key = lookup(var.scaleway_access_key, terraform.workspace, null)
+  secret_key = lookup(var.scaleway_secret_key, terraform.workspace, null)
+  project_id = lookup(var.scaleway_project_id, terraform.workspace, null)
 }
 
 provider "local" {

@@ -1,4 +1,5 @@
-# OVH Openstack environment
+
+# Openstack environment (used to store the state)
 OS_PROJECT_ID=
 OS_PROJECT_NAME=
 OS_USERNAME=
@@ -10,16 +11,13 @@ OS_PROJECT_DOMAIN_ID=default
 OS_INTERFACE=public
 OS_IDENTITY_API_VERSION=3
 
-# OVH credentials
-# These keys can be generated here :
-# https://api.ovh.com/createToken/?GET=/*&POST=/*&PUT=/*&DELETE=/*
-OVH_APPLICATION_KEY=
-OVH_APPLICATION_SECRET=
-OVH_CONSUMER_KEY=
+# Scaleway credentials
+SCW_ACCESS_KEY=
+SCW_SECRET_KEY=
+SCW_DEFAULT_PROJECT_ID=
 
-# OVH Cloud project id
-OVH_CLOUD_PROJECT_SERVICE=
-
-# If you want to specify a different project ID per terraform namespace,
-# you can define the following map :
-# TF_VAR_ovh_project_id={ production = "project-id-A", preprod = "project-id-B"}
+# If you want to specify a different scaleway projects per terraform workspace,
+# you can define the following maps :
+# TF_VAR_scaleway_access_key={ production = "access-key-A", preprod = "access-key-B"}
+# TF_VAR_scaleway_secret_key={ production = "secret-key-A", preprod = "secret-key-B"}
+# TF_VAR_scaleway_project_id={ production = "project-id-A", preprod = "project-id-B"}

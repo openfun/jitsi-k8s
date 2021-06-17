@@ -1,41 +1,43 @@
 
-resource "ovh_cloud_project_kube" "kube_cluster" {
-   name         = "jitsi-${terraform.workspace}"
-   region       = lookup(var.k8s_cluster_region, terraform.workspace, "GRA7")
-   service_name = lookup(var.ovh_project_id, terraform.workspace, null)
+resource "scaleway_k8s_cluster" "kube_cluster" {
+   name    = "jitsi-${terraform.workspace}"
+   version = lookup(var.k8s_version, terraform.workspace, "1.21")
+   cni     = lookup(var.k8s_cni, terraform.workspace, "cilium")
 
-   lifecycle {
-      ignore_changes = [ version ]
+   auto_upgrade {
+      enable = lookup(var.k8s_auto_upgrade_enabled, terraform.workspace, true)
+      maintenance_window_start_hour = lookup(var.k8s_auto_upgrade_maintenance_window_start_hour, terraform.workspace, 3)
+      maintenance_window_day = lookup(var.k8s_auto_upgrade_maintenance_window_day, terraform.workspace, "any")
    }
+
 }
 
-resource "ovh_cloud_project_kube_nodepool" "kube_nodepool" {
-   autoscale     = lookup(var.k8s_nodepool_autoscale, terraform.workspace, false)
-   flavor_name   = lookup(var.k8s_nodepool_flavor, terraform.workspace, "b2-15")
-   kube_id       = ovh_cloud_project_kube.kube_cluster.id
-   max_nodes     = lookup(var.k8s_nodepool_max_nodes, terraform.workspace, 1)
-   min_nodes     = lookup(var.k8s_nodepool_min_nodes, terraform.workspace, 1)
-   name          = "jitsipool-${terraform.workspace}"
-   service_name  = lookup(var.ovh_project_id, terraform.workspace, null)
-
-   lifecycle {
-      ignore_changes = [ desired_nodes ]
-   }
+resource "scaleway_k8s_pool" "kube_nodepool" {
+   autohealing         = lookup(var.k8s_nodepool_autohealing, terraform.workspace, true)
+   autoscaling         = lookup(var.k8s_nodepool_autoscale, terraform.workspace, false)
+   cluster_id          = scaleway_k8s_cluster.kube_cluster.id
+   container_runtime   = lookup(var.k8s_nodepool_container_runtime, terraform.workspace, "containerd")
+   max_size            = lookup(var.k8s_nodepool_max_nodes, terraform.workspace, 1)
+   min_size            = lookup(var.k8s_nodepool_min_nodes, terraform.workspace, 1)
+   name                = "jitsi-${terraform.workspace}"
+   node_type           = lookup(var.k8s_nodepool_flavor, terraform.workspace, "GP1-XS")
+   size                = lookup(var.k8s_nodepool_size, terraform.workspace, 1)
+   wait_for_pool_ready = true
 }
 
 output "kubeconfig" {
-   value = ovh_cloud_project_kube.kube_cluster.kubeconfig
+   value = scaleway_k8s_cluster.kube_cluster.kubeconfig[0].config_file
    sensitive = true
    description = "The kube config file to use to connect to the cluster"
 }
 
 output "k8s_nodes_url" {
-   value = ovh_cloud_project_kube.kube_cluster.nodes_url
+   value = scaleway_k8s_cluster.kube_cluster.wildcard_dns
    description = "Cluster nodes URL (DNS record that return all nodes addresses)"
 }
 
 resource "local_file" "kubeconfig" {
-   sensitive_content = ovh_cloud_project_kube.kube_cluster.kubeconfig
+   sensitive_content = scaleway_k8s_cluster.kube_cluster.kubeconfig[0].config_file
    filename = "${path.module}/.kubeconfig-${terraform.workspace}"
    file_permission = "0600"
 }

@@ -8,7 +8,7 @@ resource "helm_release" "kube-prometheus-stack" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart = "kube-prometheus-stack"
 
-  depends_on = [ ovh_cloud_project_kube_nodepool.kube_nodepool, local_file.kubeconfig]
+  depends_on = [ scaleway_k8s_pool.kube_nodepool, local_file.kubeconfig]
 }
 
 
