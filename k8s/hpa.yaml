@@ -7,46 +7,18 @@
 # desiredReplicas = ceil[currentReplicas * ( currentMetricValue / desiredMetricValue )]
 # (see https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#algorithm-details)
 #
-# If multiple metrics are specified in HPA, the formula is applied for each of them and the
-# higher desiredReplicas is taken into account.
+# If multiple metrics are specified in HPA, the formula is applied for each of
+# them and the higher desiredReplicas is taken into account.
 #
-# In our case, we will specify 2 metrics (or rules) :
-# - one to ensure that we have at least a specific number of pods available (TARGET_MIN_VALUE)
-# - one to ensure that we have a certain percentage of available pods (TARGET_PERCENT)
+# To guarantee that we always have at least TARGET_MIN_VALUE pods available, we
+# just have to set this value as minReplicas because the Deployment manages
+# only available jibris. When a jibri pod is busy, it gets orphaned and is
+# ignored by the Deployment.
 #
-# -- Notes about TARGET_MIN_VALUE
-#
-# This rule is tricky because if we use the raw number of available jibri instances as a metric,
-# HPA would scale in the wrong direction.
-#
-# Example:
-# - TARGET_MIN_VALUE = 2 (we want to have 2 jibri pods available)
-# - 12 jibri pods are running
-# - 10 jibri pods are available
-# - 2 jibri pods are busy.
-#
-# We use the number of available jibri as the metric, in this case:
-# - currentMetricValue = 10
-# - desiredMetricValue = 2
-#
-# If we apply the HPA formula:
-# desiredReplicas = ceil(12 * (10 / 2)) = 60
-#
-# HPA would like to scale up (to 60 pods!) instead of scaling down.
-#
-#
-# To invert this behavior, we can invert the metrics values:
-# - currentMetricValue = 1/10
-# - desiredMetricValue = 1/2
-#
-# If we apply the HPA formula with these metrics instead :
-# desiredReplicas = ceil(12 * ((1/10) / (1/2))) = 3
-#
-# It would scale in the right direction and adjust until it matches the target.
-#
-# All of this to explain that :
-# - We use `jibri_available_inverted` as a metric
-# - The target value is defined as (1 / TARGET_MIN_VALUE)
+# To ensure that we have a certain percentage of available pods
+# (TARGET_PERCENT), a rule is defined in this HPA based on the "jibri_busy"
+# metric, which takes into account all jibri pods in the namespace (those
+# managed by the deployment + the orphaned pods that are busy)
 
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
@@ -80,19 +52,6 @@ spec:
     - type: Object
       object:
         metric:
-          name: jibri_available_inverted
-        describedObject:
-          apiVersion: v1
-          kind: Namespace
-          name: jibri
-        target:
-          type: Value
-          # We want to always have 2 available jibri instances.
-          # So we declare 1/2 = 0.5
-          value: 0.5
-    - type: Object
-      object:
-        metric:
           name: jibri_busy
         describedObject:
           apiVersion: v1
@@ -100,5 +59,5 @@ spec:
           name: jibri
         target:
           type: Value
-          # We want to always have 20% of available jibri instances.
+          # We want to always have at least 20% of available jibri instances.
           value: 0.8
