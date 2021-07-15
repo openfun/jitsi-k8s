@@ -1,3 +1,5 @@
+nodeSelector:
+  k8s.scaleway.com/pool-name: default
 prometheus:
   url: http://prometheus-operated.default.svc
   port: 9090
