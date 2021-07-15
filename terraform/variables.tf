@@ -81,15 +81,7 @@ variable "k8s_auto_upgrade_maintenance_window_day" {
   }
 }
 
-# Kubernetes nodepool settings
-
-variable "k8s_nodepool_autoscale" {
-  type = map(bool)
-  description = "Enables the pool autoscaling feature"
-
-  default = {
-  }
-}
+# Global Kubernetes nodepool settings
 
 variable "k8s_nodepool_autohealing" {
   type = map(bool)
@@ -113,35 +105,67 @@ variable "k8s_nodepool_container_runtime" {
   }
 }
 
-variable "k8s_nodepool_flavor" {
+# `default` nodepool settings
+
+variable "k8s_default_nodepool_flavor" {
   type = map(string)
   description = "Flavor name of the instances that will be created for the node pool"
 
+  # You can get the list of available flavors here:
+  # https://www.scaleway.com/en/pricing/
+
   default = {
-    production = "GP1-XS"
+    preprod = "DEV1-M"
   }
 }
 
-variable "k8s_nodepool_min_nodes" {
+variable "k8s_default_nodepool_size" {
   type = map(number)
-  description = "Minimum number of nodes allowed in the node pool"
+  description = "Number of nodes desired in the default pool"
 
   default = {
-    production = 1
   }
 }
 
-variable "k8s_nodepool_max_nodes" {
+
+# `jibri` nodepool settings
+
+
+variable "k8s_jibri_nodepool_autoscale" {
+  type = map(bool)
+  description = "Enables the pool autoscaling feature"
+
+  default = {
+  }
+}
+
+variable "k8s_jibri_nodepool_flavor" {
+  type = map(string)
+  description = "Flavor name of the instances that will be created in the jibri node pool"
+
+  default = {
+    preprod = "DEV1-L"
+  }
+}
+
+variable "k8s_jibri_nodepool_min_nodes" {
   type = map(number)
-  description = "Maximum number of nodes allowed in the pool"
+  description = "Minimum number of nodes allowed in the jibri node pool"
+
+  default = {
+  }
+}
+
+variable "k8s_jibri_nodepool_max_nodes" {
+  type = map(number)
+  description = "Maximum number of nodes allowed in the jibri node pool"
 
   default = {
     preprod = 2
-    production = 5
   }
 }
 
-variable "k8s_nodepool_size" {
+variable "k8s_jibri_nodepool_size" {
   type = map(number)
   description = "Desired pool size. This value will only be used at creation if autoscaling is enabled."
 

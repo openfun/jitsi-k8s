@@ -8,7 +8,27 @@ resource "helm_release" "kube-prometheus-stack" {
   repository = "https://prometheus-community.github.io/helm-charts"
   chart = "kube-prometheus-stack"
 
-  depends_on = [ scaleway_k8s_pool.kube_nodepool, local_file.kubeconfig]
+  set {
+    name = "alertmanager.alertmanagerSpec.nodeSelector.k8s\\.scaleway\\.com/pool-name"
+    value = "default"
+  }
+
+  set {
+    name = "prometheusOperator.nodeSelector.k8s\\.scaleway\\.com/pool-name"
+    value = "default"
+  }
+
+  set {
+    name = "prometheus.prometheusSpec.nodeSelector.k8s\\.scaleway\\.com/pool-name"
+    value = "default"
+  }
+
+  set {
+    name = "grafana.nodeSelector.k8s\\.scaleway\\.com/pool-name"
+    value = "default"
+  }
+
+  depends_on = [ scaleway_k8s_pool.default, local_file.kubeconfig]
 }
 
 
@@ -47,6 +67,11 @@ resource "helm_release" "kube-eagle" {
   set {
     name = "serviceMonitor.releaseLabel"
     value = "kube-prometheus-stack"
+  }
+
+  set {
+    name = "nodeSelector.k8s\\.scaleway\\.com/pool-name"
+    value = "default"
   }
 
   depends_on = [ helm_release.kube-prometheus-stack ]

@@ -109,6 +109,8 @@ spec:
         volumeMounts:
         - name: jibri-metadata-updater
           mountPath: /opt/jibri-metadata-updater
+      nodeSelector:
+        k8s.scaleway.com/pool-name: jibri
       restartPolicy: Always
       securityContext: {}
       volumes:
