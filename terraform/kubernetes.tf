@@ -58,6 +58,74 @@ resource "scaleway_k8s_pool" "jibri" {
    depends_on = [ scaleway_k8s_pool.default ]
 }
 
+
+# We reserve a Load balancer IP. It will be used by the ingress-nginx controller
+# service.
+resource "scaleway_lb_ip" "ingress_lb_ip" {
+}
+
+# Install the ingress nginx controller with Helm.
+# Notes:
+# - Scaleway has specific installation parameters that can be found here:
+#   https://github.com/kubernetes/ingress-nginx/blob/main/hack/generate-deploy-scripts.sh
+# - We assign the previously reserved Load Balancer IP to the ingress service,
+#   as documented here:
+#   https://www.scaleway.com/en/docs/using-a-load-balancer-to-expose-your-kubernetes-kapsule-ingress-controller-service/#-Using-this-IP-Address-on-Kubernetes-LoadBalancer-Services
+resource "helm_release" "ingress-nginx" {
+ name = "ingress-nginx"
+
+ repository = "https://kubernetes.github.io/ingress-nginx"
+ chart = "ingress-nginx"
+
+ set {
+   name = "controller.service.type"
+   value = "LoadBalancer"
+ }
+
+  set {
+   name = "controller.service.externalTrafficPolicy"
+   value = "Local"
+ }
+
+  set {
+   name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/scw-loadbalancer-proxy-protocol-v2"
+   value = "true"
+ }
+
+  set {
+   name = "controller.config.use-proxy-protocol"
+   value = "true"
+ }
+
+  # Assign the reserved IP address to the controller service
+  set {
+     name = "controller.service.loadBalancerIP"
+     value = scaleway_lb_ip.ingress_lb_ip.ip_address
+  }
+
+  # Assign controller pods to the default node pool
+  set {
+     name = "controller.nodeSelector.k8s\\.scaleway\\.com/pool-name"
+     value = "default"
+  }
+  set {
+     name = "controller.admissionWebhooks.patch.nodeSelector.k8s\\.scaleway\\.com/pool-name"
+     value = "default"
+  }
+  set {
+     name = "defaultBackend.nodeSelector.k8s\\.scaleway\\.com/pool-name"
+     value = "default"
+  }
+
+  depends_on = [
+     scaleway_k8s_pool.default,
+     local_file.kubeconfig,
+     scaleway_lb_ip.ingress_lb_ip
+  ]
+}
+
+
+
 output "kubeconfig" {
    value = scaleway_k8s_cluster.kube_cluster.kubeconfig[0].config_file
    sensitive = true
@@ -66,7 +134,12 @@ output "kubeconfig" {
 
 output "k8s_nodes_url" {
    value = scaleway_k8s_cluster.kube_cluster.wildcard_dns
-   description = "Cluster nodes URL (DNS record that return all nodes addresses)"
+   description = "Cluster nodes URL (DNS record that return all nodes addresses)"
+}
+
+output "ingress_public_address" {
+   value = scaleway_lb_ip.ingress_lb_ip.ip_address
+   description = "Public IP address of the ingress controller"
 }
 
 resource "local_file" "kubeconfig" {
