@@ -8,6 +8,9 @@ configMapGenerator:
   - name: jitsi-common
     envs:
       - ./env/jitsi-common.env
+  - name: jitsi-meet-front
+    envs:
+      - ./env/jitsi-meet-front.env
   - name: jicofo
     envs:
       - ./env/jicofo.env
@@ -26,11 +29,31 @@ secretGenerator:
       - ./env/jitsi-secrets.env
 
 resources:
+  - cert-issuer.yml
   - jibri-deployment.yml
   - jibri-hpa.yaml
   - jibri-podmonitor.yml
   - jibri-service-account.yaml
   - jicofo-deployment.yml
+  - jitsi-meet-front-deployment.yml
+  - jitsi-meet-front-ingress.yml
+  - jitsi-meet-front-service.yml
   - namespace.yml
   - prosody-deployment.yml
   - prosody-service.yml
+
+replacements:
+  # Replace the domain name configured in jitsi-meet-front Ingress with
+  # the value XMPP_DOMAIN defined in the jitsi-common.env file
+  - source:
+      name: jitsi-common
+      kind: ConfigMap
+      version: v1
+      fieldPath: data.XMPP_DOMAIN
+    targets:
+      - select:
+          kind: Ingress
+          name: jitsi-meet-front
+        fieldPaths:
+          - spec.rules.0.host
+          - spec.tls.0.hosts.0

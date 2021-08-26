@@ -17,3 +17,19 @@ secretGenerator:
     behavior: merge
     envs:
       - ./jitsi-secrets.env
+
+replacements:
+  # Replace the domain name configured in jitsi-meet-front Ingress with
+  # the value XMPP_DOMAIN defined in the jitsi-common.env file
+  - source:
+      name: jitsi-common
+      kind: ConfigMap
+      version: v1
+      fieldPath: data.XMPP_DOMAIN
+    targets:
+      - select:
+          kind: Ingress
+          name: jitsi-meet-front
+        fieldPaths:
+          - spec.rules.0.host
+          - spec.tls.0.hosts.0
