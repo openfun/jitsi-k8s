@@ -1,0 +1,27 @@
+# Note that the domain specified in this file (placeholder.domain.example) is
+# just a placeholder with an arbitrary value. It is replaced by kustomize
+# during the build phase (see replacements in kustomization.yaml)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "jitsi-meet-front"
+  labels:
+    app: "jitsi-meet-front"
+  annotations:
+    cert-manager.io/issuer: "letsencrypt-jitsi-issuer"
+spec:
+  rules:
+  - host: "placeholder.domain.example"
+    http:
+      paths:
+      - backend:
+          service:
+            name: "jitsi-meet-front"
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - "placeholder.domain.example"
+    secretName: "jitsi-meet-front-tls"

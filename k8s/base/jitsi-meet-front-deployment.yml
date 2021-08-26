@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jitsi-meet-front
+  labels:
+    app: jitsi-meet-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jitsi-meet-front
+  template:
+    metadata:
+      labels:
+        app: jitsi-meet-front
+    spec:
+      containers:
+        - name: jitsi-meet
+          image: "jitsi/web:stable-5963"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: jitsi-common
+            - configMapRef:
+                name: jitsi-meet-front
+          env:
+            - name: JICOFO_AUTH_USER
+              valueFrom:
+                secretKeyRef:
+                  name: jitsi-secrets
+                  key: JICOFO_AUTH_USER
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+      nodeSelector:
+        k8s.scaleway.com/pool-name: default

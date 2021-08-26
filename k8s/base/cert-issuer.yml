@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-jitsi-issuer
+spec:
+  acme:
+##    The email field is optional, but strongly recommended to receive
+##    certificate expiration notices and issues related to your account
+##    It should be specified in a kustomize overlay.
+#    email: contact@example.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: jitsi-issuer-account-key
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
