@@ -1,4 +1,4 @@
-KUSTOMIZE  = bin/kustomize build  --load_restrictor LoadRestrictionsNone
+KUSTOMIZE  = bin/kustomize build  --load-restrictor LoadRestrictionsNone
 
 JITSI_K8S_ENV ?= default
 
