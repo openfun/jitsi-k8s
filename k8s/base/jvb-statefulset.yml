@@ -1,0 +1,78 @@
+# The Jitsi Videobridge (JVB) component has some special behavior:
+# - Each JVB container is publicly accessible on UDP port JVB_PORT (10000 by
+#   default), on its node public IP address. It is done with the hostPort
+#   feature.
+# - Therefore, only one JVB pod can run on each node (k8s prevent hostPort
+#   conflicts automatically, so there is no need to configure anti affinity to
+#   handle this)
+# - JVB pods are scheduled on the jvb nodepool, which have cluster autoscaling
+#   enabled to add nodes when necessary
+# - JVB opens a port to communicate with other JVBs with the OCTO protocol.
+#   The port (JVB_OCTO_BIND_PORT, tcp 4096) is only accessible from within
+#   the cluster. JVB advertises its internal IP to other JVB with the
+#   environment variable JVB_OCTO_PUBLIC_ADDRESS, which is populated with
+#   the fieldref status.podIP
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jvb
+  labels:
+    app: jvb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jvb
+  serviceName: jvb
+  template:
+    metadata:
+      labels:
+        app: jvb
+    spec:
+      containers:
+        - name: jvb
+          image: "jitsi/jvb:stable-5963"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+          - configMapRef:
+              name: jitsi-common
+          - configMapRef:
+              name: jvb
+          env:
+            - name: JVB_AUTH_USER
+              valueFrom:
+                secretKeyRef:
+                  name: jitsi-secrets
+                  key: JVB_AUTH_USER
+            - name: JVB_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jitsi-secrets
+                  key: JVB_AUTH_PASSWORD
+            - name: JVB_OCTO_PUBLIC_ADDRESS
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+            # The UDP port 10000 is exposed to the internet on the node
+            # public IP address (using hostPort).
+            # That means only one JVB container can run per node.
+            - name: rtp-udp
+              hostPort: 10000
+              containerPort: 10000
+              protocol: UDP
+            - name: octo
+              containerPort: 4096
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /about/health
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /about/health
+              port: 8080
+          resources:
+            {}
+      nodeSelector:
+        k8s.scaleway.com/pool-name: jvb

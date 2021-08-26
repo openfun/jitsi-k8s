@@ -14,6 +14,9 @@ configMapGenerator:
   - name: jicofo
     envs:
       - ./env/jicofo.env
+  - name: jvb
+    envs:
+      - ./env/jvb.env
   - name: prosody
     envs:
       - ./env/prosody.env
@@ -38,6 +41,7 @@ resources:
   - jitsi-meet-front-deployment.yml
   - jitsi-meet-front-ingress.yml
   - jitsi-meet-front-service.yml
+  - jvb-statefulset.yml
   - namespace.yml
   - prosody-deployment.yml
   - prosody-service.yml
