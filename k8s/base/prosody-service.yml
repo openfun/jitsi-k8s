@@ -1,0 +1,31 @@
+# The prosody service is reachable internally by other jitsi components,
+# at the address prosody.jitsi.svc
+# BOSH connections are relayed by the jitsi-meet nginx, so this service does
+# not need to be reachable publicly.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: prosody
+  labels:
+    app: prosody
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5280
+      protocol: TCP
+      name: tcp-bosh-insecure
+    - port: 5281
+      protocol: TCP
+      name: tcp-bosh-secure
+    - port: 5347
+      protocol: TCP
+      name: tcp-xmpp-component
+    - port: 5222
+      protocol: TCP
+      name: tcp-xmpp-c2
+    - port: 5269
+      protocol: TCP
+      name: tcp-xmpp-s2
+  selector:
+    app: prosody
