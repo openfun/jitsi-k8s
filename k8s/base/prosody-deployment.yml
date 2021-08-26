@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: prosody
+  name: prosody
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prosody
+  template:
+    metadata:
+      annotations:
+      labels:
+        app: prosody
+    spec:
+      containers:
+      - image: jitsi/prosody:stable-5963
+        name: prosody
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /http-bind
+            port: bosh-insecure
+        readinessProbe:
+          httpGet:
+            path: /http-bind
+            port: bosh-insecure
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 2
+        ports:
+        - name: xmpp-c2s
+          containerPort: 5222
+          protocol: TCP
+        - name: xmpp-s2s
+          containerPort: 5269
+          protocol: TCP
+        - name: xmpp-component
+          containerPort: 5347
+          protocol: TCP
+        - name: bosh-insecure
+          containerPort: 5280
+          protocol: TCP
+        - name: bosh-secure
+          containerPort: 5281
+          protocol: TCP
+        envFrom:
+          - configMapRef:
+              name: jitsi-common
+          - configMapRef:
+              name: prosody
+          - secretRef:
+              name: jitsi-secrets
+        volumeMounts:
+        - name: prosody-data
+          mountPath: /config/data
+      nodeSelector:
+        k8s.scaleway.com/pool-name: default
+      restartPolicy: Always
+      volumes:
+        - name: prosody-data
+          emptyDir: {}

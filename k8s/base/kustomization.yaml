@@ -8,6 +8,9 @@ configMapGenerator:
   - name: jitsi-common
     envs:
       - ./env/jitsi-common.env
+  - name: prosody
+    envs:
+      - ./env/prosody.env
   - name: jibri-metadata-updater
     files:
       - ./jibri-metadata-updater.py
@@ -25,3 +28,5 @@ resources:
   - jibri-podmonitor.yml
   - jibri-service-account.yaml
   - namespace.yml
+  - prosody-deployment.yml
+  - prosody-service.yml
