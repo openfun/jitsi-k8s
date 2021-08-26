@@ -56,7 +56,7 @@ spec:
         describedObject:
           apiVersion: v1
           kind: Namespace
-          name: jibri
+          name: jitsi
         target:
           type: Value
           # We want to always have at least 20% of available jibri instances.

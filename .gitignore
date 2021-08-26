@@ -8,3 +8,6 @@ env.d/*.env-*
 
 # Generated Kubernetes configuration file
 .kubeconfig*
+
+k8s/overlays/*
+!k8s/overlays/example
