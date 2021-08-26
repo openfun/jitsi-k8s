@@ -8,6 +8,9 @@ configMapGenerator:
   - name: jitsi-common
     envs:
       - ./env/jitsi-common.env
+  - name: jicofo
+    envs:
+      - ./env/jicofo.env
   - name: prosody
     envs:
       - ./env/prosody.env
@@ -27,6 +30,7 @@ resources:
   - jibri-hpa.yaml
   - jibri-podmonitor.yml
   - jibri-service-account.yaml
+  - jicofo-deployment.yml
   - namespace.yml
   - prosody-deployment.yml
   - prosody-service.yml
