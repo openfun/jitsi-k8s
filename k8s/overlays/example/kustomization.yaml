@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+# Merge the base config map with values specified in the jitsi.env file
+configMapGenerator:
+  - name: jitsi-common
+    behavior: merge
+    envs:
+      - ./jitsi-common.env
+
+# Merge the base secret with values specified in the jitsi-secrets.env file
+secretGenerator:
+  - name: jitsi-secrets
+    behavior: merge
+    envs:
+      - ./jitsi-secrets.env

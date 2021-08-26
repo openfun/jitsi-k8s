@@ -2,28 +2,21 @@ KUSTOMIZE  = bin/kustomize build  --load_restrictor LoadRestrictionsNone
 
 JITSI_K8S_ENV ?= default
 
-DIST_ENV_FILES := env.d/jitsi.dist env.d/jitsi-secrets.dist
-ENV_FILES := $(DIST_ENV_FILES:.dist=.env-$(JITSI_K8S_ENV))
-
 default: help
 
 bootstrap: ## Bootstrap the jitsi-k8s project
 bootstrap: \
-	env.d/terraform \
-	$(ENV_FILES)
-
-env.d/%.env-$(JITSI_K8S_ENV): env.d/%.dist
-	cp $< $@
+	env.d/terraform
 
 env.d/terraform:
 	cp env.d/terraform.dist env.d/terraform
 
 k8s-apply-config: ## Build and deploy the Kubernetes configuration for jitsi
-	@$(KUSTOMIZE) /data/k8s | bin/kubectl apply -f -
+	@$(KUSTOMIZE) /data/k8s/overlays/$(JITSI_K8S_ENV) | bin/kubectl apply -f -
 .PHONY: k8s-apply-config
 
 k8s-build-config: ## Build and display the Kubernetes configuration for jitsi
-	@$(KUSTOMIZE) /data/k8s
+	@$(KUSTOMIZE) /data/k8s/overlays/$(JITSI_K8S_ENV)
 .PHONY: k8s-build-config
 
 

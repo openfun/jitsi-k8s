@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: jibri
+    envs:
+      - ./env/jibri.env
+  - name: jitsi-common
+    envs:
+      - ./env/jitsi-common.env
+  - name: jibri-metadata-updater
+    files:
+      - ./jibri-metadata-updater.py
+
+namespace: jitsi
+
+secretGenerator:
+  - name: jitsi-secrets
+    envs:
+      - ./env/jitsi-secrets.env
+
+resources:
+  - jibri-deployment.yml
+  - jibri-hpa.yaml
+  - jibri-podmonitor.yml
+  - jibri-service-account.yaml
+  - namespace.yml

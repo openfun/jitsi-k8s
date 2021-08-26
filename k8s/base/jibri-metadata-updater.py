@@ -28,7 +28,7 @@ jibri_health_api = os.getenv(
 )
 
 # -- Kubernetes
-# URL to reach Kubernetes' API
+# URL to reach Kubernetes' API
 k8s_api = os.getenv("K8S_API", "https://kubernetes.default.svc")
 # Path to ServiceAccount token
 service_account_directory = os.getenv(
