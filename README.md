@@ -18,7 +18,7 @@ This repository is composed of two parts:
    the Kubernetes cluster.
 
 
-We made the following (opinionated) choices, but the project can be easily adapted to choose alternatives options :
+We made the following (opinionated) choices, but the project can be easily adapted to choose alternative options:
 
 - We use [Scaleway](https://www.scaleway.com/) as a cloud provider, to provision the Kubernetes cluster.
 - The Terraform state is stored in an [Openstack Swift](https://docs.openstack.org/swift/latest/) bucket.
@@ -36,7 +36,7 @@ So, you need to provide the required environment variables to authenticate again
 Execute the following command to initialize the `env.d/terraform` file:
 
 ```
-make env.d/terraform
+make bootstrap
 ```
 
 Then, edit this file (`env.d/terraform`) and define the `OS_*` variables according to your Openstack environment.
@@ -68,17 +68,17 @@ Execute the following command to initialize Terraform with the configured state.
 
 We use Scaleway to provision the Kubernetes cluster. You need to set your Scaleway API credentials in environment variables.
 
-##### 1.4a : single environment
+##### 1.4a: single environment
 
-If you intend to deploy this project on a single environment, you can set the following variables in `env.d/terraform` :
+If you intend to deploy this project on a single environment, you can set the following variables in `env.d/terraform`:
 
-- `SCW_DEFAULT_PROJECT_ID` : your scaleway project ID
-- `SCW_ACCESS_KEY` : your Scaleway API access key
-- `SCW_SECRET_KEY` : your Scaleway API secret key
+- `SCW_DEFAULT_PROJECT_ID`: your scaleway project ID
+- `SCW_ACCESS_KEY`: your Scaleway API access key
+- `SCW_SECRET_KEY`: your Scaleway API secret key
 
-##### 1.4b : multiple environments (recommended)
+##### 1.4b: multiple environments (recommended)
 
-In most cases, you'll deploy this project on multiple environments (e.g. : preprod, production).
+In most cases, you'll deploy this project on multiple environments (e.g.: preprod, production).
 
 You'll have to create a Scaleway project for each of these environments.
 And each environment will have its own Terraform workspace.
@@ -103,12 +103,12 @@ TF_VAR_scaleway_secret_key={ production = "secret_key_A", preprod = "secret_key_
 TF_VAR_scaleway_project_id={ production = "project_A", preprod = "project_B"}
 ```
 
-#### 1.5 : customize configuration
+#### 1.5: customize configuration
 
 Look at the variables defined in `terraform/variables.tf`.
 You can customize them by environment, just like we did in step `1.4b`.
 
-#### 1.5 : deploy :rocket:
+#### 1.5: deploy :rocket:
 
 Execute the following command to see what resources will be deployed:
 
@@ -123,20 +123,43 @@ And when you are ready to deploy it:
 
 Once your kubernetes cluster is deployed, you can interact with it with the command `bin/kubectl`.
 
-If you work with multiple environments, don't forget to select the right one by executing `bin/activate`.
+First of all, don't forget to select the right environment one by executing `bin/activate`.
 
+Base Kubernetes resources definition are stored in the `k8s/base` directory, using [Kustomize](https://kustomize.io/).
 
-To initialize an environment, you can execute `make bootstrap`.
-It will generate 2 files :
+#### 2.1 Overlay initialization
 
-- `env.d/jitsi.env-<environment-name>`
-- `env.d/jitsi-secrets.env-<environment-name>`
+Each environment should be defined as a Kustomize overlay, inheriting from the base definition.
+To generate a Kustomize overlay for your environment, you can execute the following command:
 
-You should customize these Jitsi related variables with your own requirements.
+```shell
+bin/init-overlay
+```
 
+You will be asked for the FQDN (e.g. `jitsi-staging.example.com`) that you will use for this environment.
+You will also be asked for an email address that will be used to create a Let's Encrypt issuer account.
 
-All Kubernetes resources definition are stored in the `k8s` directory, using the [Kustomize](https://kustomize.io/) template syntax.
+After then, your new overlay will be created in the directory `k8s/overlays/<your-environment>/`.
+Note that this directory is ignored by git.
 
+It is ready to use as-is.
+
+If you want to customize it, look at the environment variables defined in the `k8s/base/env` directory to see the default
+values and get an overview of what you can change easily.
+
+You can also override Kubernetes resources using [Kustomize](https://kustomize.io/).
+
+#### 2.2 DNS entry
+
+You need to create a DNS `A` entry for the FQDN that you specified in the previous section.
+It should point to the public IP reserved by terraform, you can get it by executing the
+following command:
+
+```shell
+bin/terraform output ingress_public_address
+```
+
+#### 2.3 Deploy :rocket:
 
 
 To generate the configuration to deploy, you can execute :
