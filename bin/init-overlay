@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# shellcheck source=bin/_utils.sh
+source "$(dirname "${BASH_SOURCE[0]}")/_utils.sh"
+
+assert_env_selected
+
+declare -r OVERLAYS_HOME="${OVERLAYS_HOME:-"k8s/overlays"}"
+declare -r NEW_OVERLAY_PATH="${OVERLAYS_HOME}/${JITSI_K8S_ENV}"
+declare -r OVERLAY_TEMPLATE_PATH="${OVERLAY_TEMPLATE_PATH:-"k8s/overlays/template"}"
+
+if [[ -d "${NEW_OVERLAY_PATH}" ]] ; then
+  echo "The directory ${NEW_OVERLAY_PATH} already exists. Please remove (or rename) it before executing this command." >&2
+  exit 1
+fi
+
+mkdir "$NEW_OVERLAY_PATH"
+
+prompt="Which domain name will you use for this jitsi environment (e.g. jitsi.example): "
+read -r -p "${prompt}" BASE_DOMAIN
+
+prompt="Please enter an email for your letsencrypt issuer account : "
+read -r -p "${prompt}" LETSENCRYPT_ACCOUNT_EMAIL
+
+echo -n "Generating secret keys..."
+JIBRI_RECORDER_PASSWORD=$(random_password 64)
+JIBRI_XMPP_PASSWORD=$(random_password 64)
+JICOFO_AUTH_PASSWORD=$(random_password 64)
+JVB_AUTH_PASSWORD=$(random_password 64)
+echo OK
+
+export BASE_DOMAIN
+export JIBRI_RECORDER_PASSWORD
+export JIBRI_XMPP_PASSWORD
+export JICOFO_AUTH_PASSWORD
+export JVB_AUTH_PASSWORD
+export LETSENCRYPT_ACCOUNT_EMAIL
+
+echo -n "Generating ${NEW_OVERLAY_PATH}/jitsi-common.env ..."
+envsubst < k8s/overlays/.template/jitsi-common.env.tpl > "${NEW_OVERLAY_PATH}/jitsi-common.env"
+echo OK
+
+echo -n "Generating ${NEW_OVERLAY_PATH}/jitsi-secrets.env ..."
+envsubst < k8s/overlays/.template/jitsi-secrets.env.tpl > "${NEW_OVERLAY_PATH}/jitsi-secrets.env"
+chmod 600 "${NEW_OVERLAY_PATH}/jitsi-secrets.env"
+echo OK
+
+echo -n "Generating ${NEW_OVERLAY_PATH}/cert-issuer.yml ..."
+cp k8s/overlays/.template/cert-issuer.yml "${NEW_OVERLAY_PATH}/cert-issuer.yml"
+echo OK
+
+echo -n "Generating ${NEW_OVERLAY_PATH}/kustomization.yaml ..."
+cp k8s/overlays/.template/kustomization.yaml "${NEW_OVERLAY_PATH}/kustomization.yaml"
+echo OK
+
+
+echo
+echo "Your new kustomize overlay has been generated in ${NEW_OVERLAY_PATH}"
+echo "Feel free to customize it according to your needs!"
+echo
+echo "Next steps :"
+echo "- Configure the DNS entry {$BASE_DOMAIN} (you can get the target IP"
+echo "  address with the following command:"
+echo "    $> bin/terraform output ingress_public_address"
+echo " - Generate and check the kubernetes resources with the command:"
+echo "    $> make k8s-build-config"
+echo " - Deploy the kubernetes resources with:"
+echo "    $> make k8s-apply-config"

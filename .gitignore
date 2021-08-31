@@ -11,3 +11,4 @@ env.d/*.env-*
 
 k8s/overlays/*
 !k8s/overlays/example
+!k8s/overlays/.template

@@ -9,3 +9,9 @@ function assert_env_selected()
     exit 10
   fi
 }
+
+function random_password()
+{
+  declare -i size=${1:-32}
+  head -c 4096 < /dev/urandom | tr -dc A-Z-a-z-0-9 | head -c"${size}"
+}
