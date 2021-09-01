@@ -1,0 +1,7 @@
+
+# Path to the kustomize overlays.
+# If you want to store your overlays in another directory,
+# you can tweak the following variable:
+
+OVERLAYS_HOME=./k8s/overlays
+

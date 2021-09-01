@@ -140,7 +140,7 @@ You will be asked for the FQDN (e.g. `jitsi-staging.example.com`) that you will 
 You will also be asked for an email address that will be used to create a Let's Encrypt issuer account.
 
 After then, your new overlay will be created in the directory `k8s/overlays/<your-environment>/`.
-Note that this directory is ignored by git.
+Note that this directory is ignored by git, we'll see later how to move it on a separate repository for team work.
 
 It is ready to use as-is.
 
@@ -167,3 +167,37 @@ To generate the configuration to deploy, you can execute :
 
 And to actually deploy it, you can execute:
 ```make k8s-apply-config```
+
+## Overlay versioning
+
+You might want to share your overlays with your team and version it on a VCS.
+You can do this, you just have to provide a OVERLAYS_HOME environment variable
+containing an absolute path to your overlay directory.
+
+You can either export it as needed, or set it permanently in the
+`env.d/kustomize` file.
+
+Example:
+
+```
+If you have the following terraform environments:
+- production
+- staging
+- test
+
+You can store your overlays in a directory structure like this:
+/tmp/my-overlays
+├── production
+│   ├── kustomization.yaml
+│   └── ...
+├── staging
+│   ├── kustomization.yaml
+│   └── ...
+└── test
+    ├── kustomization.yaml
+    └── ...
+
+And you just have to set this value in `env.d/kustomize`:
+OVERLAYS_HOME=/tmp/my-overlays
+
+```

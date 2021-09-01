@@ -1,5 +1,5 @@
 env.d/terraform
-env.d/*.env-*
+env.d/kustomize
 
 # Terraform
 .terraform

@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
+KUSTOMIZE_ENV_FILE="$(dirname "${BASH_SOURCE[0]}")/../env.d/kustomize"
+
+# If the OVERLAYS_HOME variable is already defined, it should not be
+# overridden by the env file.
+if [[ -z "${OVERLAYS_HOME}" ]] ; then
+  source "${KUSTOMIZE_ENV_FILE}"
+fi
+
+export OVERLAYS_HOME
+
 # Run kustomize commands in docker container via docker compose
 # shellcheck disable=SC2068
 DOCKER_USER="$(id -u):$(id -g)" \
