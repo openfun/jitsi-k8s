@@ -6,10 +6,14 @@ default: help
 
 bootstrap: ## Bootstrap the jitsi-k8s project
 bootstrap: \
+	env.d/kustomize \
 	env.d/terraform
 
 env.d/terraform:
 	cp env.d/terraform.dist env.d/terraform
+
+env.d/kustomize:
+	cp env.d/kustomize.dist env.d/kustomize
 
 k8s-apply-config: ## Build and deploy the Kubernetes configuration for jitsi
 	@$(KUSTOMIZE) /data/k8s/overlays/$(JITSI_K8S_ENV) | bin/kubectl apply -f -

@@ -33,5 +33,4 @@ services:
     user: ${DOCKER_USER:-1000}
     volumes:
       - ./k8s:/data/k8s
-      - ./env.d/jitsi.env-${JITSI_K8S_ENV:-"default"}:/data/env.d/jitsi
-      - ./env.d/jitsi-secrets.env-${JITSI_K8S_ENV:-"default"}:/data/env.d/jitsi-secrets
+      - ${OVERLAYS_HOME}:/data/k8s/overlays
