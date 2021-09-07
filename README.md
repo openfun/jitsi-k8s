@@ -199,3 +199,24 @@ And you just have to set this value in `env.d/kustomize`:
 OVERLAYS_HOME=/tmp/my-overlays
 
 ```
+
+## Secrets encryption
+
+If you store your overlays on a shared repository, you might want to encrypt
+your .env files that contain sensitive values, like the `jitsi-secrets.env`
+that is used to generate a Kubernetes Secret.
+
+There are multiple solutions to solve this problem, as Kustomize is extensible
+with its plugin system. If you want to store sensitive values on an external
+source (like AWS Secret Manager, Azure Vault or Hashicorp Vault), you can use
+the [Secretize plugin](https://github.com/bbl/secretize).
+
+A `GpgSecretGenerator` plugin is bundled with this project. It allows to generate
+a Secret from a GPG encrypted file (with a symmetric cipher). You can find an
+example of usage within the [example](k8s/overlays/example/) overlay.
+You might want to look at these files :
+- [kustomization.yaml](k8s/overlays/example/kustomization.yaml) : see the generators section
+- [secret-generator.yaml](k8s/overlays/example/secret-generator.yaml) : the generator configuration file
+- [secrets.env.gpg](k8s/overlays/example/secrets.env.gpg): the GPG encrypted env file (the passphrase is `example`)  
+
+You just have to provide the passphrase in the `SECRET_GPG_PASSWORD` environment variable when invoking `kustomize`.
