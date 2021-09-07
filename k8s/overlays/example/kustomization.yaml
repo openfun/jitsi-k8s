@@ -11,12 +11,8 @@ configMapGenerator:
     envs:
       - ./jitsi-common.env
 
-# Merge the base secret with values specified in the jitsi-secrets.env file
-secretGenerator:
-  - name: jitsi-secrets
-    behavior: merge
-    envs:
-      - ./jitsi-secrets.env
+generators:
+  - ./secret-generator.yaml
 
 replacements:
   # Replace the domain name configured in jitsi-meet-front Ingress with
