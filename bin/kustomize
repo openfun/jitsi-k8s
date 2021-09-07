@@ -14,4 +14,4 @@ export OVERLAYS_HOME
 # Run kustomize commands in docker container via docker compose
 # shellcheck disable=SC2068
 DOCKER_USER="$(id -u):$(id -g)" \
-    docker-compose run -T --rm kustomize "$@"
+    docker-compose run -T --rm app kustomize "$@"

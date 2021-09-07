@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# The container user (see USER in the Dockerfile) is an un-privileged user that
+# does not exists and is not created during the build phase (see Dockerfile).
+# Hence, we use this entrypoint to wrap commands that will be run in the
+# container to create an entry for this user in the /etc/passwd file.
+
+# The container user (see USER in the Dockerfile) is an un-privileged user that
+# does not exists and is not created during the build phase (see Dockerfile).
+# Hence, we use this entrypoint to wrap commands that will be run in the
+# container to create an entry for this user in the /etc/passwd file.
+export HOME=/home/jitsi
+USER_NAME=jitsi
+
+if ! whoami > /dev/null 2>&1; then
+  if [ -w /etc/passwd ]; then
+    echo "${USER_NAME}:x:$(id -u):$(id -g):${USER_NAME} user:${HOME}:/sbin/nologin" >> /etc/passwd
+  fi
+fi
+
+exec "$@"

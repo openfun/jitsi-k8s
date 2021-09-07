@@ -3,9 +3,16 @@
 # shellcheck source=bin/_config.sh
 source "$(dirname "${BASH_SOURCE[0]}")/_utils.sh"
 
-assert_env_selected
+extra_volumes=""
+
+declare -r env_kubeconfig="./terraform/.kubeconfig-${JITSI_K8S_ENV:-"default"}"
+
+if [[ -f "${env_kubeconfig}" ]]; then
+  extra_volumes="-v ${PWD}/${env_kubeconfig}:/data/kubeconfig"
+  export KUBECONFIG=/data/kubeconfig
+fi
 
 # Run kubectl commands in docker container via docker compose
 # shellcheck disable=SC2068
 DOCKER_USER="$(id -u):$(id -g)" \
-    docker-compose run --rm kubectl "$@"
+    docker-compose run --rm ${extra_volumes} app kubectl "$@"
