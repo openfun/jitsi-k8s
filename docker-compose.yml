@@ -22,15 +22,18 @@ services:
     volumes:
       - ./terraform:/app
 
-  kubectl:
-    image: bitnami/kubectl:latest
+  app:
+    build:
+      context: .
+      target: core
+      args:
+        DOCKER_USER: ${DOCKER_USER:-1000}
+    image: jitsi-k8s:development
     user: ${DOCKER_USER:-1000}
-    volumes:
-      - ./terraform/.kubeconfig-${JITSI_K8S_ENV:-"default"}:/.kube/config
-
-  kustomize:
-    image: k8s.gcr.io/kustomize/kustomize:v4.2.0
-    user: ${DOCKER_USER:-1000}
+    environment:
+      - SECRET_GPG_PASSWORD
+      - KUBECONFIG
+      - KUSTOMIZE_PLUGIN_HOME=/data/k8s/plugins
     volumes:
       - ./k8s:/data/k8s
-      - ${OVERLAYS_HOME}:/data/k8s/overlays
+      - ${OVERLAYS_HOME:-./k8s/overlays}:/data/k8s/overlays

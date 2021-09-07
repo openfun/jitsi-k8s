@@ -1,8 +1,19 @@
-KUSTOMIZE  = bin/kustomize build  --load-restrictor LoadRestrictionsNone
-
+KUSTOMIZE  = bin/kustomize build  --load-restrictor LoadRestrictionsNone --enable-alpha-plugins
 JITSI_K8S_ENV ?= default
 
+# -- Docker
+# Get the current user ID to use for docker run and docker exec commands
+DOCKER_UID           = $(shell id -u)
+DOCKER_GID           = $(shell id -g)
+DOCKER_USER          = $(DOCKER_UID):$(DOCKER_GID)
+COMPOSE              = DOCKER_USER=$(DOCKER_USER) docker-compose
+
+
 default: help
+
+build: ## build the app container
+	@$(COMPOSE) build app
+.PHONY: build
 
 bootstrap: ## Bootstrap the jitsi-k8s project
 bootstrap: \
