@@ -5,8 +5,6 @@
 The goal of this project is to deploy a scalable [Jitsi](https://github.com/jitsi/jitsi-meet)
 infrastructure on a Kubernetes cluster.
 
-In its current state, this project only allows to deploy the "Jibri" component.
-
 ## Architecture
 
 This repository is composed of two parts:
