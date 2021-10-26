@@ -118,7 +118,7 @@ resource "helm_release" "ingress-nginx" {
   # The scw-loadbalancer-use-hostname flag allows to execute requests coming from the cluster to the load balancer.
   # cert-manager self checks dont work without this flag.
   set {
-    name = "controller.service.annotations.service.beta.kubernetes.io/scw-loadbalancer-use-hostname"
+    name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/scw-loadbalancer-use-hostname"
     value = "true"
   }
 
