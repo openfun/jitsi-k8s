@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: jitsi-meet
-          image: "jitsi/web:stable-6726-1"
+          image: "jitsi/web:stable-6826"
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:

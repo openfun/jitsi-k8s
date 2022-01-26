@@ -16,7 +16,7 @@ spec:
         app: prosody
     spec:
       containers:
-      - image: jitsi/prosody:stable-6726-1
+      - image: jitsi/prosody:stable-6826
         name: prosody
         imagePullPolicy: IfNotPresent
         livenessProbe:
