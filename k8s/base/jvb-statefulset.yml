@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: jvb
-          image: "jitsi/jvb:stable-6826"
+          image: "jitsi/jvb:stable-6865"
           imagePullPolicy: IfNotPresent
           envFrom:
           - configMapRef:
