@@ -1,0 +1,100 @@
+version: 2.1
+jobs:
+  # Check that the git history is clean and complies with our expectations
+  lint-git:
+    docker:
+      - image: cimg/python:3.10
+    working_directory: ~/jitsi_k8s
+    steps:
+      - checkout
+      - run:
+          name: Check absence of fixup commits
+          command: |
+            ! git log origin/main..HEAD | grep 'fixup!'
+      - run:
+          name: Install gitlint
+          command: |
+            pip install --user requests gitlint
+      - run:
+          name: lint commit messages added to master
+          command: |
+            ~/.local/bin/gitlint --commits origin/main..HEAD
+
+  # Check that the CHANGELOG has been updated in the current branch
+  check-changelog:
+    docker:
+      - image: circleci/buildpack-deps:stretch-scm
+    working_directory: ~/jitsi_k8s
+    steps:
+      - checkout
+      - run:
+          name: Check that the CHANGELOG has been modified in the current branch
+          command: |
+            git whatchanged --name-only --pretty="" origin..HEAD | grep CHANGELOG
+
+  # Check that the CHANGELOG max line length does not exceed 80 characters
+  lint-changelog:
+    docker:
+      - image: debian:stretch
+    working_directory: ~/jitsi_k8s
+    steps:
+      - checkout
+      - run:
+          name: Check CHANGELOG max line length
+          command: |
+            # Get the longuest line width (ignoring release links)
+            test $(cat CHANGELOG.md | grep -Ev "^\[.*\]: https://github.com/openjitsi_k8s" | wc -L) -le 80
+
+  # Build docker image
+  build-docker:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    working_directory: ~/jitsi_k8s
+    steps:
+      # Checkout repository sources
+      - checkout
+      # Activate docker-in-docker
+      - setup_remote_docker:
+          version: 20.10.11
+      # Each image is tagged with the current git commit sha1 to avoid
+      # collisions in parallel builds.
+      - run:
+          name: Build production image
+          command: |
+            docker build \
+              -t jitsi-k8s:${CIRCLE_SHA1} \
+              .
+      - run:
+          name: Check built image availability
+          command: docker image ls "jitsi-k8s:${CIRCLE_SHA1}*"
+
+workflows:
+  version: 2
+
+  jitsi_k8s:
+    jobs:
+      # Check validity of git history
+      - lint-git:
+          filters:
+            tags:
+              only: /.*/
+
+      # Check changelog validity
+      - check-changelog:
+          filters:
+            branches:
+              ignore: main
+            tags:
+              ignore: /.*/
+      - lint-changelog:
+          filters:
+            branches:
+              ignore: main
+            tags:
+              ignore: /.*/
+
+      # Build docker image
+      - build-docker:
+          filters:
+            tags:
+              only: /.*/
