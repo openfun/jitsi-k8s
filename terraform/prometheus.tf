@@ -1,3 +1,14 @@
+# Prompt the Grafana admin password
+variable "grafana_password" {
+  type        = string
+  description = "Password of the Grafana web interface"
+}
+
+# Prompt the Grafana domain name
+variable "grafana_domain_name" {
+  type        = string
+  description = "Domain name of the Grafana web interface"
+}
 
 # Install the helm kube-prometheus-stack chart
 # https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
@@ -28,7 +39,28 @@ resource "helm_release" "kube-prometheus-stack" {
     value = "default"
   }
 
-  depends_on = [ scaleway_k8s_pool.default, local_file.kubeconfig]
+  # MONITORING OPTIONS
+  set {
+    name = "grafana.adminPassword"
+    value = var.grafana_password
+  }
+
+  set {
+    name = "grafana.ingress.annotations.kubernetes\\.io/ingress\\.class"
+    value = "nginx"
+  }
+
+  set {
+    name = "grafana.ingress.hosts"
+    value = "{${var.grafana_domain_name}}"
+  }
+
+  set {
+    name = "grafana.ingress.enabled"
+    value = "true"
+  }
+
+  depends_on = [ scaleway_k8s_pool.default, local_file.kubeconfig ]
 }
 
 
