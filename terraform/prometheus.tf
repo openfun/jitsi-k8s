@@ -60,7 +60,7 @@ resource "helm_release" "kube-prometheus-stack" {
     value = "true"
   }
 
-  depends_on = [ scaleway_k8s_pool.default, local_file.kubeconfig ]
+  depends_on = [ scaleway_k8s_pool.default, local_file.kubeconfig, scaleway_domain_record.grafana_domain_record ]
 }
 
 
