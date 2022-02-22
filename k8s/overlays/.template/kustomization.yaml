@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - cert-issuer.yml
 
 # Merge the base config map with values specified in the jitsi.env file
 configMapGenerator:

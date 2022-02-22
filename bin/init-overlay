@@ -46,10 +46,6 @@ envsubst < k8s/overlays/.template/jitsi-secrets.env.tpl > "${NEW_OVERLAY_PATH}/j
 chmod 600 "${NEW_OVERLAY_PATH}/jitsi-secrets.env"
 echo OK
 
-echo -n "Generating ${NEW_OVERLAY_PATH}/cert-issuer.yml ..."
-cp k8s/overlays/.template/cert-issuer.yml "${NEW_OVERLAY_PATH}/cert-issuer.yml"
-echo OK
-
 echo -n "Generating ${NEW_OVERLAY_PATH}/kustomization.yaml ..."
 cp k8s/overlays/.template/kustomization.yaml "${NEW_OVERLAY_PATH}/kustomization.yaml"
 echo OK
