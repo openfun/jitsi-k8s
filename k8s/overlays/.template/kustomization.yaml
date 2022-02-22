@@ -3,6 +3,8 @@ kind: Kustomization
 
 resources:
   - ../../base
+
+patchesStrategicMerge:
   - cert-issuer.yml
 
 # Merge the base config map with values specified in the jitsi.env file
