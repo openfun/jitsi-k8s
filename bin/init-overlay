@@ -24,10 +24,10 @@ prompt="Please enter an email for your letsencrypt issuer account : "
 read -r -p "${prompt}" LETSENCRYPT_ACCOUNT_EMAIL
 
 echo -n "Generating secret keys..."
-JIBRI_RECORDER_PASSWORD=$(random_password 64)
-JIBRI_XMPP_PASSWORD=$(random_password 64)
-JICOFO_AUTH_PASSWORD=$(random_password 64)
-JVB_AUTH_PASSWORD=$(random_password 64)
+JIBRI_RECORDER_PASSWORD=$(openssl rand -hex 20)
+JIBRI_XMPP_PASSWORD=$(openssl rand -hex 20)
+JICOFO_AUTH_PASSWORD=$(openssl rand -hex 20)
+JVB_AUTH_PASSWORD=$(openssl rand -hex 20)
 echo OK
 
 export BASE_DOMAIN
