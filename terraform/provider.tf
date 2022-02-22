@@ -1,6 +1,6 @@
 # This provider is configured with the OS_* environment variables
-provider "openstack" {
-}
+# provider "openstack" {
+# }
 
 provider "scaleway" {
   access_key = lookup(var.scaleway_access_key, terraform.workspace, null)

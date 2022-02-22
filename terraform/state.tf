@@ -1,10 +1,10 @@
 
 terraform {
   required_providers {
-    openstack = {
-      source = "terraform-provider-openstack/openstack"
-      version = "1.42.0"
-    }
+    # openstack = {
+    #   source = "terraform-provider-openstack/openstack"
+    #   version = "1.42.0"
+    # }
 
     helm = {
       source = "hashicorp/helm"
@@ -23,8 +23,13 @@ terraform {
 
   }
 
-  backend "swift" {
-    container = "jitsi-k8s-terraform"
+  backend "s3" {
+    bucket = "jitsi-k8s-terraform"
+    key = "mystate.tfstate"
+    region = "fr-par"
+    endpoint = "https://s3.fr-par.scw.cloud"
+    skip_region_validation = true
+    skip_credentials_validation = true
   }
 
   required_version = ">= 0.15"
