@@ -18,5 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix password generation on macos
 - Fix `k8s-apply-config` in Makefile for macos users
 - Merge `cert-issuer` related files in base and overlays
+- Change default octo bridge selection strategy from SplitBridge to SingleBridge
+- Overlays template initializes all domain-related variables
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
