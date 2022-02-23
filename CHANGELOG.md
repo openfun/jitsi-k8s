@@ -16,5 +16,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix password generation on macos
+- Fix `k8s-apply-config` in Makefile for macos users
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s

@@ -27,7 +27,8 @@ env.d/kustomize:
 	cp env.d/kustomize.dist env.d/kustomize
 
 k8s-apply-config: ## Build and deploy the Kubernetes configuration for jitsi
-	@$(KUSTOMIZE) /data/k8s/overlays/$(JITSI_K8S_ENV) | bin/kubectl apply -f -
+	@$(KUSTOMIZE) /data/k8s/overlays/$(JITSI_K8S_ENV) > k8s/.k8s-built-config
+	bin/kubectl apply -f /data/k8s/.k8s-built-config
 .PHONY: k8s-apply-config
 
 k8s-build-config: ## Build and display the Kubernetes configuration for jitsi
