@@ -33,6 +33,24 @@ variable "scaleway_project_id" {
   }
 }
 
+# DNS settings
+
+variable "jitsi_dns_name" {
+  type = map(string)
+  description = "Hostname of the jitsi instance."
+
+  default = {
+  }
+}
+
+variable "grafana_dns_name" {
+  type = map(string)
+  description = "Hostname of the grafana instance."
+
+  default = {
+  }
+}
+
 # Kubernetes cluster settings
 
 variable "k8s_version" {
