@@ -21,5 +21,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Change default octo bridge selection strategy from SplitBridge to SingleBridge
 - Overlays template initializes all domain-related variables
 - Fix typing errors
+- `bin/init-overlay` targets the right OVERLAYS_HOME
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
