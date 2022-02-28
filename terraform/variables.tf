@@ -51,6 +51,15 @@ variable "grafana_dns_name" {
   }
 }
 
+# Grafana settings
+variable "grafana_password" {
+  type = map(string)
+  description = "Password of the admin account of the grafana instance."
+
+  default = {
+  }
+}
+
 # Kubernetes cluster settings
 
 variable "k8s_version" {

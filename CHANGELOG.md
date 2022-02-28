@@ -10,6 +10,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Variabilize domain name to create several k8s clusters on several workspaces
+
+### Added
+
 - Allow developper to create several namespaces
 
 ### Added

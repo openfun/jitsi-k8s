@@ -21,3 +21,8 @@ SCW_DEFAULT_PROJECT_ID=
 # TF_VAR_scaleway_access_key={ production = "access-key-A", preprod = "access-key-B"}
 # TF_VAR_scaleway_secret_key={ production = "secret-key-A", preprod = "secret-key-B"}
 # TF_VAR_scaleway_project_id={ production = "project-id-A", preprod = "project-id-B"}
+
+# Variables used by terraform
+TF_VAR_jitsi_dns_name={ default = "meet" }
+TF_VAR_grafana_dns_name={ default = "grafana" }
+TF_VAR_grafana_password={ default = "ThED3F4lt_pWd-*-" }
