@@ -13,5 +13,5 @@ function assert_env_selected()
 function random_password()
 {
   declare -i size=${1:-32}
-  head -c 4096 < /dev/urandom | tr -dc A-Z-a-z-0-9 | head -c"${size}"
+  head -c 4096 < /dev/urandom | base64 | tr -dc A-Z-a-z-0-9 | head -c"${size}"
 }

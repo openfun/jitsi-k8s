@@ -13,4 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Terraform project to create a K8S cluster on scaleway
 - Kustomize project to deploy jitsi on K8S
 
+### Fixed
+
+- Fix password generation on macos
+
 [Unreleased]: https://github.com/openfun/jitsi-k8s
