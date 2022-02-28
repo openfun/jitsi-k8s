@@ -3,6 +3,8 @@ set -eo pipefail
 
 # shellcheck source=bin/_utils.sh
 source "$(dirname "${BASH_SOURCE[0]}")/_utils.sh"
+# source kustomize env file as OVERLAYS_HOME is defined there
+source "$(dirname "${BASH_SOURCE[0]}")/../env.d/kustomize"
 
 assert_env_selected
 
