@@ -5,7 +5,7 @@ variable "scaleway_access_key" {
   description = "The access key to use for the Scaleway provider"
 
   # This maps allows to use a different Scaleway accounts per workspace.
-  # If not specified, the ovh provider will fallback on the
+  # If not specified, the scaleway provider will fallback on the
   # SCW_ACCESS_KEY environment variable
   default = {
   }
@@ -16,7 +16,7 @@ variable "scaleway_secret_key" {
   description = "The secret key to use for the Scaleway provider"
 
   # This maps allows to use a different Scaleway accounts per workspace.
-  # If not specified, the ovh provider will fallback on the
+  # If not specified, the scaleway provider will fallback on the
   # SCW_SECRET_KEY environment variable
   default = {
   }
@@ -27,7 +27,7 @@ variable "scaleway_project_id" {
   description = "The id of the Scaleway project to use"
 
   # This maps allows to use a different Scaleway project per workspace.
-  # If not specified, the ovh provider will fallback on the
+  # If not specified, the scaleway provider will fallback on the
   # SCW_DEFAULT_PROJECT_ID environment variable
   default = {
   }
