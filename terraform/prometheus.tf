@@ -1,15 +1,3 @@
-# Prompt the Grafana admin password
-variable "grafana_password" {
-  type        = string
-  description = "Password of the Grafana web interface"
-}
-
-# Prompt the Grafana domain name
-variable "grafana_domain_name" {
-  type        = string
-  description = "Domain name of the Grafana web interface"
-}
-
 # Install the helm kube-prometheus-stack chart
 # https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
 
@@ -42,7 +30,7 @@ resource "helm_release" "kube-prometheus-stack" {
   # MONITORING OPTIONS
   set {
     name = "grafana.adminPassword"
-    value = var.grafana_password
+    value = lookup(var.grafana_password, terraform.workspace, "ThED3F4lt_pWd-*-")
   }
 
   set {
@@ -52,7 +40,7 @@ resource "helm_release" "kube-prometheus-stack" {
 
   set {
     name = "grafana.ingress.hosts"
-    value = "{${var.grafana_domain_name}}"
+    value = "{${scaleway_domain_record.grafana_domain_record.name}.${scaleway_domain_record.grafana_domain_record.dns_zone}}"
   }
 
   set {

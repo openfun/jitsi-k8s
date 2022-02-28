@@ -12,5 +12,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Terraform project to create a K8S cluster on scaleway
 - Kustomize project to deploy jitsi on K8S
+- Variabilize domain name to create several k8s clusters on several workspaces
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
