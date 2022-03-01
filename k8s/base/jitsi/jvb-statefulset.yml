@@ -19,7 +19,7 @@ metadata:
   labels:
     app: jvb
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: jvb
@@ -33,6 +33,13 @@ spec:
         - name: jvb
           image: "jitsi/jvb:stable-6865"
           imagePullPolicy: IfNotPresent
+          command:
+          - /entrypoint/entrypoint.sh
+          args:
+            - "/init"
+          volumeMounts:
+            - name: jvb-entrypoint
+              mountPath: /entrypoint
           envFrom:
           - configMapRef:
               name: jitsi-common
@@ -54,13 +61,6 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
           ports:
-            # The UDP port 10000 is exposed to the internet on the node
-            # public IP address (using hostPort).
-            # That means only one JVB container can run per node.
-            - name: rtp-udp
-              hostPort: 10000
-              containerPort: 10000
-              protocol: UDP
             - name: octo
               containerPort: 4096
               protocol: TCP
@@ -74,5 +74,10 @@ spec:
               port: 8080
           resources:
             {}
+      volumes:
+        - name: jvb-entrypoint
+          configMap:
+            name: jvb-entrypoint
+            defaultMode: 0744 # make executable
       nodeSelector:
         k8s.scaleway.com/pool-name: jvb

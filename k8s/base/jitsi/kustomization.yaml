@@ -45,6 +45,8 @@ resources:
   - namespace.yml
   - prosody-deployment.yml
   - prosody-service.yml
+  - jvb-entrypoint-configmap.yml
+  - jvb-services.yml
 
 replacements:
   # Replace the domain name configured in jitsi-meet-front Ingress with
