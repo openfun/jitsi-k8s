@@ -29,6 +29,18 @@ spec:
       labels:
         app: jvb
     spec:
+      # AntiAffinity prevents a second pod to run on a node
+      # that already have a JVB pod running
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                      - jvb
+              topologyKey: "kubernetes.io/hostname"
       containers:
         - name: jvb
           image: "jitsi/jvb:stable-6865"
@@ -73,6 +85,11 @@ spec:
               path: /about/health
               port: 8080
           resources:
-            {}
+            limits:
+              cpu: 3000m
+              memory: 14000Mi
+            requests:
+              cpu: 2000m
+              memory: 12000Mi
       nodeSelector:
         k8s.scaleway.com/pool-name: jvb
