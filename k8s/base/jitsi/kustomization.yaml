@@ -47,6 +47,7 @@ resources:
   - jitsi-meet-front-deployment.yml
   - jitsi-meet-front-ingress.yml
   - jitsi-meet-front-service.yml
+  - jvb-hpa.yml
   - jvb-statefulset.yml
   - namespace.yml
   - prosody-deployment.yml

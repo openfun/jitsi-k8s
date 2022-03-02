@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Autoscale JVB pool
+
 ### Fixed
 
 - Security issue with metacontroller permissions over kubernetes API
