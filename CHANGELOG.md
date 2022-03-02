@@ -28,5 +28,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ## Changed
 
 - Rework env to make it easy to add jwt authentication
+- Autoscale JVB pool according to network usage
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
