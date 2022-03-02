@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Run `make k8s-apply-config` only one time to apply the entire k8s configuration
+
 ### Added
 
 - Avoid disturbing conferences when shutting down JVB
