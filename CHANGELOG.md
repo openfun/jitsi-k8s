@@ -26,4 +26,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix typing errors
 - `bin/init-overlay` targets the right OVERLAYS_HOME
 
+### Changed
+
+- Autoscale JVB pool according to network utilization
+
 [Unreleased]: https://github.com/openfun/jitsi-k8s
