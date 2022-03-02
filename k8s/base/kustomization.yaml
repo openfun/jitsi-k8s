@@ -23,6 +23,9 @@ configMapGenerator:
   - name: jibri-metadata-updater
     files:
       - ./jibri-metadata-updater.py
+  - name: jvb-shutdown-script
+    files:
+      - ./jvb-shutdown.sh
 
 namespace: jitsi
 

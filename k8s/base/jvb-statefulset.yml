@@ -41,10 +41,35 @@ spec:
                     values:
                       - jvb
               topologyKey: "kubernetes.io/hostname"
+      # This grace period allows the shutdown hook to
+      # complete before the pod deletion
+      terminationGracePeriodSeconds: 3600
+      volumes:
+        - name: jvb-shutdown-script
+          configMap:
+            name: jvb-shutdown-script
+            defaultMode: 0744
       containers:
         - name: jvb
           image: "jitsi/jvb:stable-6865"
           imagePullPolicy: IfNotPresent
+          # Hook that waits for users to disconnect before
+          # killing the pod
+          # - option '-p' specifies the entrypoint process as
+          #   process to kill
+          # - option '-t' specifies the timeout
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /shutdown/jvb-shutdown.sh
+                  - -p
+                  - "1"
+                  - -t
+                  - "3"
+          volumeMounts:
+            - name: jvb-shutdown-script
+              mountPath: /shutdown
           envFrom:
           - configMapRef:
               name: jitsi-common
