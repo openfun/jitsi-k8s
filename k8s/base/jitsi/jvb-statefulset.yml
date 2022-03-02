@@ -39,15 +39,30 @@ spec:
           configMap:
             name: jvb-entrypoint
             defaultMode: 0744 # make executable
+        - name: jvb-shutdown
+          configMap:
+            name: jvb-shutdown
+            defaultMode: 0744 # make executable
+      # in case there is a long running conference on a JVB that should be shut down, give it time to finish
+      terminationGracePeriodSeconds: 2147483647
       containers:
         - name: jvb
           image: "jitsi/jvb:stable-6865"
           imagePullPolicy: IfNotPresent
           envFrom:
-          - configMapRef:
-              name: jitsi-common
-          - configMapRef:
-              name: jvb
+            - configMapRef:
+                name: jitsi-common
+            - configMapRef:
+                name: jvb
+           # Hook that waits for users to disconnect before
+           # killing the pod
+           # - option '-p' specifies the entrypoint process as
+           #   process to kill
+           # - option '-t' specifies the timeout
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/shutdown/graceful_shutdown.sh", "-p", "1", "-t", "3"]
           command:
             - /entrypoint/entrypoint.sh
           args:
@@ -55,6 +70,8 @@ spec:
           volumeMounts:
             - name: jvb-entrypoint
               mountPath: /entrypoint
+            - name: jvb-shutdown
+              mountPath: /shutdown
           env:
             - name: JVB_AUTH_USER
               valueFrom:

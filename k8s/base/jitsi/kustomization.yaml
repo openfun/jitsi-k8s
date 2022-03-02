@@ -26,6 +26,9 @@ configMapGenerator:
   - name: jvb-entrypoint
     files:
       - entrypoint.sh=jvb-entrypoint.sh
+  - name: jvb-shutdown
+    files:
+      - shutdown.sh=jvb-shutdown.sh
 
 namespace: jitsi
 
