@@ -25,6 +25,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Overlays template initializes all domain-related variables
 - Fix various typing errors
 - `bin/init-overlay` targets the right OVERLAYS_HOME
+- Fix typos in `jibri_status` documentation
 
 ## Changed
 
