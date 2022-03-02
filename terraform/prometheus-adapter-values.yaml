@@ -25,3 +25,20 @@ rules:
     name:
       as: "jibri_busy"
     metricsQuery: sum(jibri_busystatus{<<.LabelMatchers>>}) by (<<.GroupBy>>) / count(jibri_busystatus{<<.LabelMatchers>>})  by (<<.GroupBy>>)
+  # The network_transmit_bytes_last_5m custom metric indicates the bytes transmitted by pod.
+  # It can be queried manually with :
+  # bin/kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespaces/jitsi/pods/*/network_transmit_bytes_last_5m"
+  # (value per pod in the jitsi namespace)
+  #
+  # bin/kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/jitsi/metrics/network_transmit_bytes_last_5m
+  # (total of bytes transmitted for the whole jitsi namespace)
+  - seriesQuery: '{__name__="container_network_transmit_bytes_total"}'
+    resources:
+      overrides:
+        namespace:
+          resource: namespace
+        pod:
+          resource: pod
+    name:
+      as: "network_transmit_bytes_last_5m"
+    metricsQuery: sum(rate(container_network_transmit_bytes_total{<<.LabelMatchers>>}[5m])) by (<<.GroupBy>>)
