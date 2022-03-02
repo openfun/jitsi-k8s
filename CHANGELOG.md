@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Autoscale JVB pool according to network utilization
+
 ### Added
 
 - Autoscale JVB pool
