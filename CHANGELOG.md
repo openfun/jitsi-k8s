@@ -10,6 +10,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Import metacontroller from Github
+- Dynamicaly create and destroy JVB services linked to created and destroyed JVB pod
+
+### Added
+
 - Variabilize domain name to create several k8s clusters on several workspaces
 
 ### Added

@@ -23,6 +23,9 @@ configMapGenerator:
   - name: jibri-metadata-updater
     files:
       - ./jibri-metadata-updater.py
+  - name: jvb-entrypoint
+    files:
+      - entrypoint.sh=jvb-entrypoint.sh
 
 namespace: jitsi
 
@@ -45,6 +48,7 @@ resources:
   - namespace.yml
   - prosody-deployment.yml
   - prosody-service.yml
+  - service-per-pod-decoratorcontroller.yml
 
 replacements:
   # Replace the domain name configured in jitsi-meet-front Ingress with

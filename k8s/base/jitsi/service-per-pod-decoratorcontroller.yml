@@ -1,0 +1,23 @@
+# This service-per-pod DecoratorController will run webhooks on the service-per-pod
+# metacontroller app, defined in the metacontroller workspace
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: DecoratorController
+metadata:
+  name: service-per-pod
+spec:
+  resources:
+  - apiVersion: apps/v1
+    resource: statefulsets
+    annotationSelector:
+      matchExpressions:
+      - {key: service-per-pod-label, operator: Exists}
+  attachments:
+  - apiVersion: v1
+    resource: services
+  hooks:
+    sync:
+      webhook:
+        url: http://service-per-pod.metacontroller.svc.cluster.local/sync-service-per-pod
+    finalize:
+      webhook:
+        url: http://service-per-pod.metacontroller.svc.cluster.local/finalize-service-per-pod

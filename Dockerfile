@@ -32,7 +32,7 @@ RUN wget "https://github.com/mikefarah/yq/releases/download/v${YQ_RELEASE}/yq_li
 FROM base as core
 
 RUN apt-get update && \
-    apt-get install -y gpg jq && \
+    apt-get install -y git gpg jq && \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=downloader /download/kubectl /usr/local/bin/kubectl

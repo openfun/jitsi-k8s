@@ -1,10 +1,12 @@
 # The Jitsi Videobridge (JVB) component has some special behavior:
 # - Each JVB container is publicly accessible on UDP port JVB_PORT (10000 by
-#   default), on its node public IP address. It is done with the hostPort
-#   feature.
-# - Therefore, only one JVB pod can run on each node (k8s prevent hostPort
-#   conflicts automatically, so there is no need to configure anti affinity to
-#   handle this)
+#   default), on its node public IP address. This variable is initialized by
+#   the entrypoint.sh script.
+# - Each JVB pod is linked to a service created by the service-per-pod
+#   DecoratorDontroller. The service exposes the JVB_PORT as a nodePort.
+# - The JVB_PORT has to be different for each JVB and is thus calculated by
+#   the following formula : basePort + index_of_the_pod_in_the_statefulset.
+#   basePort is equal to 30300.
 # - JVB pods are scheduled on the jvb nodepool, which have cluster autoscaling
 #   enabled to add nodes when necessary
 # - JVB opens a port to communicate with other JVBs with the OCTO protocol.
@@ -18,8 +20,11 @@ metadata:
   name: jvb
   labels:
     app: jvb
+  # needed for metacontroller to create/delete service per pod
+  annotations:
+    service-per-pod-label: "statefulset.kubernetes.io/pod-name"
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: jvb
@@ -29,6 +34,11 @@ spec:
       labels:
         app: jvb
     spec:
+      volumes:
+        - name: jvb-entrypoint
+          configMap:
+            name: jvb-entrypoint
+            defaultMode: 0744 # make executable
       containers:
         - name: jvb
           image: "jitsi/jvb:stable-6865"
@@ -38,6 +48,13 @@ spec:
               name: jitsi-common
           - configMapRef:
               name: jvb
+          command:
+            - /entrypoint/entrypoint.sh
+          args:
+            - "/init"
+          volumeMounts:
+            - name: jvb-entrypoint
+              mountPath: /entrypoint
           env:
             - name: JVB_AUTH_USER
               valueFrom:
@@ -54,13 +71,6 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
           ports:
-            # The UDP port 10000 is exposed to the internet on the node
-            # public IP address (using hostPort).
-            # That means only one JVB container can run per node.
-            - name: rtp-udp
-              hostPort: 10000
-              containerPort: 10000
-              protocol: UDP
             - name: octo
               containerPort: 4096
               protocol: TCP
