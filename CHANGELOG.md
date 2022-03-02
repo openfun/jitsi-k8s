@@ -13,5 +13,16 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Terraform project to create a K8S cluster on scaleway
 - Kustomize project to deploy jitsi on K8S
 - Variabilize domain name to create several k8s clusters on several workspaces
+- Avoid disturbing conferences when shutting down JVB
+
+### Fixed
+
+- Fix password generation on macos
+- Fix `k8s-apply-config` in Makefile for macos users
+- Merge `cert-issuer` related files in base and overlays
+- Change default octo bridge selection strategy from SplitBridge to SingleBridge
+- Overlays template initializes all domain-related variables
+- Fix typing errors
+- `bin/init-overlay` targets the right OVERLAYS_HOME
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
