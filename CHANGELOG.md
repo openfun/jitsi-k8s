@@ -10,6 +10,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Security issue with metacontroller permissions over kubernetes API
+
+### Fixed
+
 - Run `make k8s-apply-config` only one time to apply the entire k8s configuration
 
 ### Added

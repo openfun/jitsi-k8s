@@ -1,0 +1,39 @@
+# This file aim at reducing the rights of the metacontroller over the k8s API
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: metacontroller
+rules:
+  - apiGroups:
+      - "apps"
+    resources:
+      - "statefulsets"
+    verbs:
+      - "get"
+      - "watch"
+      - "list"
+  - apiGroups:
+      - ""
+    resources:
+      - "services"
+    verbs:
+      - "get"
+      - "watch"
+      - "list"
+      - "create"
+      - "delete"
+  - apiGroups:
+      - ""
+    resources:
+      - "events"
+    verbs:
+      - "create"
+      - "patch"
+  - apiGroups:
+      - "metacontroller.k8s.io"
+    resources:
+      - "*"
+    verbs:
+      - "get"
+      - "watch"
+      - "list"

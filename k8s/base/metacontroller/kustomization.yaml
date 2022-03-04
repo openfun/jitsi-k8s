@@ -9,6 +9,9 @@ resources:
   - https://github.com/metacontroller/metacontroller//manifests/production/?ref=v2.2.5
   - service-per-pod-deployment.yaml
 
+patchesStrategicMerge:
+  - metacontroller-rbac-patch.yaml
+
 namespace: metacontroller
 
 configMapGenerator:
