@@ -28,8 +28,6 @@ env.d/kustomize:
 
 k8s-apply-config: ## Build and deploy the Kubernetes configuration for jitsi
 	@$(KUSTOMIZE) /data/k8s/overlays/$(JITSI_K8S_ENV) > k8s/.k8s-builded-config
-	bin/kubectl apply -k /data/k8s/base/metacontroller
-	bin/kubectl wait --for condition=established --timeout=10s crd/decoratorcontrollers.metacontroller.k8s.io
 	bin/kubectl apply -f /data/k8s/.k8s-builded-config
 .PHONY: k8s-apply-config
 

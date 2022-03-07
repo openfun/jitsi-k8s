@@ -5,11 +5,7 @@ kind: Kustomization
 # and https://github.com/hpi-schul-cloud/jitsi-deployment/tree/463ba815d3a18087e1e3b5bab9801699c5b31892
 
 resources:
-  # Syntax: https://github.com/kubernetes-sigs/kustomize/blob/master/examples/remoteBuild.md#remote-targets
-  - https://github.com/metacontroller/metacontroller//manifests/production/?ref=v2.2.5
   - service-per-pod-deployment.yaml
-
-patchesStrategicMerge:
   - metacontroller-rbac-patch.yaml
 
 namespace: metacontroller
