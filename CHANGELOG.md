@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Variabilize domain name to create several k8s clusters on several workspaces
 - Avoid disturbing conferences when shutting down JVB
 - Autoscale JVB pool
+- Deploy JVB exporter and podmonitor
 
 ### Fixed
 
