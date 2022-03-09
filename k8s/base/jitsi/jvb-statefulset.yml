@@ -99,6 +99,28 @@ spec:
             httpGet:
               path: /about/health
               port: 8080
+        # Sidecar container that exports stats for Prometheus
+        # Values are scraped by ./jvb-podmonitor.yml
+        - name: exporter
+          image: systemli/prometheus-jitsi-meet-exporter:1.1.9
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /metrics
+              port: 9888
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          ports:
+            - name: exporter
+              containerPort: 9888
+              protocol: TCP
+          args:
+            - "-videobridge-url"
+            - "http://localhost:8080/colibri/stats"
           resources:
             {}
       nodeSelector:
