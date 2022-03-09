@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: jvb-monitor
+  labels:
+    app: jvb
+    # The following label is required so the Prometheus operator include it
+    # in its scrapped metrics.
+    # All metrics are described at https://github.com/systemli/prometheus-jitsi-meet-exporter#metrics
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: jvb
+  podMetricsEndpoints:
+    - port: exporter
