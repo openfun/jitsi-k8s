@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Kustomize project to deploy jitsi on K8S
 - Avoid disturbing conferences when shutting down JVB
 - Autoscale JVB pool
+- Deploy JVB exporter and podmonitor
 
 ### Fixed
 
