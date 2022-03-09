@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Example to override images name and tag
 - Avoid disturbing conferences when shutting down JVB
 - Autoscale JVB pool
+- Deploy JVB exporter and podmonitor
 
 ### Fixed
 
