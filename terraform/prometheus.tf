@@ -28,7 +28,50 @@ resource "helm_release" "kube-prometheus-stack" {
     value = "default"
   }
 
-  depends_on = [ scaleway_k8s_pool.default, local_file.kubeconfig]
+  # Add Jitsi-Meet dashboards to Grafana
+  # Dashboards are fetched from https://github.com/systemli/prometheus-jitsi-meet-exporter/tree/1.1.9/dashboards
+  # Values are merged with https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+  set {
+    name = "grafana.dashboardProviders.dashboardproviders\\.yaml.apiVersion"
+    value = 1
+  }
+
+  set {
+    name = "grafana.dashboardProviders.dashboardproviders\\.yaml.providers[0].name"
+    value = "jitsi"
+  }
+
+  set {
+    name = "grafana.dashboardProviders.dashboardproviders\\.yaml.providers[0].orgId"
+    value = 1
+  }
+
+  set {
+    name = "grafana.dashboardProviders.dashboardproviders\\.yaml.providers[0].options.path"
+    value = "/var/lib/grafana/dashboards/jitsi"
+  }
+
+  set {
+    name = "grafana.dashboards.jitsi.jitsi-meet.url"
+    value = "https://raw.githubusercontent.com/systemli/prometheus-jitsi-meet-exporter/1.1.9/dashboards/jitsi-meet.json"
+  }
+
+  set {
+    name = "grafana.dashboards.jitsi.jitsi-meet.datasource"
+    value = "Prometheus"
+  }
+
+  set {
+    name = "grafana.dashboards.jitsi.jitsi-meet-system.url"
+    value = "https://raw.githubusercontent.com/systemli/prometheus-jitsi-meet-exporter/1.1.9/dashboards/jitsi-meet-system.json"
+  }
+
+  set {
+    name = "grafana.dashboards.jitsi.jitsi-meet-system.datasource"
+    value = "Prometheus"
+  }
+
+  depends_on = [ scaleway_k8s_pool.default, local_file.kubeconfig ]
 }
 
 
