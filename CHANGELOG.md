@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Autoscale JVB pool
 - Deploy JVB exporter and podmonitor
 - Deploy Jitsi dashboards on Grafana
+- Add dynamic pod deletion cost on JVB
 
 ### Fixed
 
