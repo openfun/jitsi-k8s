@@ -29,6 +29,7 @@ spec:
       labels:
         app: jvb
     spec:
+      serviceAccountName: jvb
       # in case there is a long running conference on a JVB that should be shut down, give it time to finish
       terminationGracePeriodSeconds: 2147483647
       containers:
@@ -107,5 +108,17 @@ spec:
             - "http://localhost:8080/colibri/stats"
           resources:
             {}
+        - image: python:3.8
+          name: metadata-updater
+          command: [ "python3" ]
+          args: [ "/opt/jvb-metadata-updater/jvb-metadata-updater.py" ]
+          volumeMounts:
+            - name: jvb-metadata-updater
+              mountPath: /opt/jvb-metadata-updater
+
       nodeSelector:
         k8s.scaleway.com/pool-name: jvb
+      volumes:
+        - name: jvb-metadata-updater
+          configMap:
+            name: jvb-metadata-updater

@@ -23,6 +23,9 @@ configMapGenerator:
   - name: jibri-metadata-updater
     files:
       - ./jibri-metadata-updater.py
+  - name: jvb-metadata-updater
+    files:
+      - ./jvb-metadata-updater.py
 
 namespace: jitsi
 
@@ -43,6 +46,7 @@ resources:
   - jitsi-meet-front-service.yml
   - jvb-hpa.yml
   - jvb-podmonitor.yml
+  - jvb-service-account.yaml
   - jvb-statefulset.yml
   - namespace.yml
   - prosody-deployment.yml
