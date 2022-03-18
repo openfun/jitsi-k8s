@@ -32,6 +32,14 @@ spec:
       serviceAccountName: jvb
       # in case there is a long running conference on a JVB that should be shut down, give it time to finish
       terminationGracePeriodSeconds: 2147483647
+      initContainers:
+        - image: python:3.8
+          name: resources-updater
+          command: [ "python3" ]
+          args: [ "/opt/jvb-resources-updater/jvb-resources-updater.py" ]
+          volumeMounts:
+            - name: jvb-resources-updater
+              mountPath: /opt/jvb-resources-updater
       containers:
         - name: jvb
           image: "jitsi/jvb:stable-6865"
@@ -84,6 +92,8 @@ spec:
             httpGet:
               path: /about/health
               port: 8080
+          # Resource limits are updated with the JVB resource updater script
+          resources: {}
         # Sidecar container that exports stats for Prometheus
         # Values are scraped by ./jvb-podmonitor.yml
         - name: exporter
@@ -122,3 +132,7 @@ spec:
         - name: jvb-metadata-updater
           configMap:
             name: jvb-metadata-updater
+        - name: jvb-resources-updater
+          configMap:
+            name: jvb-resources-updater
+

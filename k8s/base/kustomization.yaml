@@ -26,6 +26,9 @@ configMapGenerator:
   - name: jvb-metadata-updater
     files:
       - ./jvb-metadata-updater.py
+  - name: jvb-resources-updater
+    files:
+      - ./jvb-resources-updater.py
 
 namespace: jitsi
 
