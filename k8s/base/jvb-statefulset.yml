@@ -19,7 +19,6 @@ metadata:
   labels:
     app: jvb
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: jvb
@@ -84,6 +83,13 @@ spec:
             httpGet:
               path: /about/health
               port: 8080
+          resources:
+            limits:
+              cpu: 3650m
+              memory: 14000Mi
+            requests:
+              cpu: 3650m
+              memory: 14000Mi
         # Sidecar container that exports stats for Prometheus
         # Values are scraped by ./jvb-podmonitor.yml
         - name: exporter
