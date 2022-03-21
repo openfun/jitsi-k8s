@@ -18,8 +18,8 @@ A clear and concise description of the behavior.
 3. And then the bug happens!
 
 **Environment**
-- Richie version:
-- Platform:
+- Repository version:
+- Overlay setup:
 
 **Possible Solution**
 <!--- Only if you have suggestions on a fix for the bug -->
