@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
+KUSTOMIZE_ENV_FILE="$(dirname "${BASH_SOURCE[0]}")/../env.d/kustomize"
+
+# If the OVERLAYS_HOME variable is already defined, it should not be
+# overridden by the env file.
+if [[ -z "${OVERLAYS_HOME}" ]] ; then
+  source "${KUSTOMIZE_ENV_FILE}"
+fi
+
+export OVERLAYS_HOME
+
 # shellcheck source=bin/_utils.sh
 source "$(dirname "${BASH_SOURCE[0]}")/_utils.sh"
 
@@ -15,13 +25,38 @@ if [[ -d "${NEW_OVERLAY_PATH}" ]] ; then
   exit 1
 fi
 
-mkdir "$NEW_OVERLAY_PATH"
-
 prompt="Which domain name will you use for this jitsi environment (e.g. jitsi.example): "
 read -r -p "${prompt}" BASE_DOMAIN
 
 prompt="Please enter an email for your letsencrypt issuer account : "
 read -r -p "${prompt}" LETSENCRYPT_ACCOUNT_EMAIL
+
+echo "These are th possible Octo Strategies:"
+PS3='Please choose the strategy you want to use for Octo : '
+octoStrategies=("SingleBridge (a conference is binded to a jvb)" "SplitBridge (will purposely split conferences in different JVBs, for dev purpose)" "RegionBased (choose jvb in same region as user, you will have to choose a region name)" "Default (RegionBased with region name 'default')")
+select strategy in "${octoStrategies[@]}"; do
+  case $strategy in
+    "SingleBridge (a conference is binded to a jvb)")
+      OCTO_STRATEGY=SingleBridgeSelectionStrategy
+      break
+      ;;
+    "SplitBridge (will purposely split conferences in different JVBs, for dev purpose)")
+      OCTO_STRATEGY=SplitBridgeSelectionStrategy
+      break
+      ;;
+    "RegionBased (choose jvb in same region as user, you will have to choose a region name)")
+      OCTO_STRATEGY=RegionBasedBridgeSelectionStrategy
+      prompt="Enter the name of your region : "
+      read -r -p "${prompt}" OCTO_REGION
+      break
+      ;;
+    *)
+      OCTO_STRATEGY=RegionBasedBridgeSelectionStrategy
+      OCTO_REGION="default"
+      break
+    ;;
+  esac
+done
 
 echo -n "Generating secret keys..."
 JIBRI_RECORDER_PASSWORD=$(openssl rand -hex 20)
@@ -36,9 +71,21 @@ export JIBRI_XMPP_PASSWORD
 export JICOFO_AUTH_PASSWORD
 export JVB_AUTH_PASSWORD
 export LETSENCRYPT_ACCOUNT_EMAIL
+export OCTO_STRATEGY
+export OCTO_REGION
+
+mkdir "$NEW_OVERLAY_PATH"
 
 echo -n "Generating ${NEW_OVERLAY_PATH}/jitsi-common.env ..."
 envsubst < k8s/overlays/.template/jitsi-common.env.tpl > "${NEW_OVERLAY_PATH}/jitsi-common.env"
+echo OK
+
+echo -n "Generating ${NEW_OVERLAY_PATH}/jicofo.env ..."
+envsubst < k8s/overlays/.template/jicofo.env.tpl > "${NEW_OVERLAY_PATH}/jicofo.env"
+echo OK
+
+echo -n "Generating ${NEW_OVERLAY_PATH}/jvb.env ..."
+envsubst < k8s/overlays/.template/jvb.env.tpl > "${NEW_OVERLAY_PATH}/jvb.env"
 echo OK
 
 echo -n "Generating ${NEW_OVERLAY_PATH}/jitsi-secrets.env ..."
