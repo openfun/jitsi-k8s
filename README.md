@@ -145,6 +145,8 @@ It is ready to use as-is.
 If you want to customize it, look at the environment variables defined in the `k8s/base/env` directory to see the default
 values and get an overview of what you can change easily.
 
+You can for example change the region used for Octo, with "default" by default.
+
 You can also override Kubernetes resources using [Kustomize](https://kustomize.io/).
 
 #### 2.2 DNS entry

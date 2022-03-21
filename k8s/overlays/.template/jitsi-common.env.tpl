@@ -31,8 +31,8 @@ ENABLE_GUESTS=1
 AUTH_TYPE=internal
 
 # Application identifier.
-# JWT_APP_ID=my_app_id
+#JWT_APP_ID=my_app_id
 
 # Authenticate using external service or just focus external auth window if
 # there is one already.
-# TOKEN_AUTH_URL=https://auth.meet.example.com/{room}
+#TOKEN_AUTH_URL=https://auth.meet.example.com/{room}
