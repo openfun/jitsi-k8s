@@ -27,10 +27,9 @@ spec:
           value: 2
           periodSeconds: 120
   metrics:
-    - type: Pods
-      pods:
-        metric:
-          name: network_transmit_bytes_last_5m
+    - type: Resource
+      resource:
+        name: cpu
         target:
-          type: AverageValue
-          averageValue: "1000000"
+          type: Utilization
+          averageUtilization: 75
