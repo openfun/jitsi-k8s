@@ -43,7 +43,7 @@ jobs:
           name: Check CHANGELOG max line length
           command: |
             # Get the longuest line width (ignoring release links)
-            test $(cat CHANGELOG.md | grep -Ev "^\[.*\]: https://github.com/openjitsi_k8s" | wc -L) -le 80
+            test $(cat CHANGELOG.md | grep -Ev "^\[.*\]: https://github.com/openfun/jitsi-k8s" | wc -L) -le 80
 
   # Build docker image
   build-docker:
