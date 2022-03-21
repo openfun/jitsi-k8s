@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Deploy JVB exporter and podmonitor
 - Deploy Jitsi dashboards on Grafana
 - Add dynamic pod deletion cost on JVB
+- Resource requests and limits on each pod
 
 ### Fixed
 
@@ -36,5 +37,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Autoscale JVB pool according to network usage
 - Octo strategy is now RegionBased by default
 - Use statefulset instead of deployment for jvb
+- Autoscale JVB pool according to CPU
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
