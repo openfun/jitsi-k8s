@@ -6,10 +6,20 @@ resources:
 
 # Merge the base config map with values specified in the jitsi.env file
 configMapGenerator:
+  - name: jicofo
+    behavior: merge
+    envs:
+      - ./jicofo.env
+
   - name: jitsi-common
     behavior: merge
     envs:
       - ./jitsi-common.env
+
+  - name: jitsi-meet-front
+    behavior: merge
+    envs:
+      - ./jitsi-meet-front.env
 
 # Merge the base secret with values specified in the jitsi-secrets.env file
 secretGenerator:

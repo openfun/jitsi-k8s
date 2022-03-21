@@ -18,3 +18,6 @@ XMPP_MUC_DOMAIN=muc.${BASE_DOMAIN}
 
 # XMPP domain for the jibri recorder
 XMPP_RECORDER_DOMAIN=recorder.${BASE_DOMAIN}
+
+# Region information for Octo
+DEPLOYMENTINFO_REGION=${OCTO_REGION}
