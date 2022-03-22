@@ -34,5 +34,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Rework env to make it easy to add jwt authentication
 - Autoscale JVB pool according to network usage
 - Octo strategy is now RegionBased by default
+- Use statefulset instead of deployment for jvb
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
