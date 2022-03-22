@@ -1,0 +1,142 @@
+http.server                                                                   debug	Firing event: GET /xmpp-websocket
+c2s5648e2de8a80                                                               info	Client connected
+c2s5648e2de8a80                                                               debug	Sending WebSocket handshake
+mod_websocket                                                                 debug	Websocket received frame: opcode=1, 98 bytes
+c2s5648e2de8a80                                                               debug	Client sent opening <stream:stream> to [meet.example.org]
+c2s5648e2de8a80                                                               debug	Sending[c2s_unauthed]: <open xmlns='urn:ietf:params:xml:ns:xmpp-framing' id='dd6db66f-95c6-43a3-8528-73aeb7b30de7' from='[meet.example.org]' xml:lang='en' version='1.0'>
+c2s5648e2de8a80                                                               debug	Sent reply <stream:stream> to client
+c2s5648e2de8a80                                                               debug	Underlying connection does not support STARTTLS
+c2s5648e2de8a80                                                               debug	Offering mechanism ANONYMOUS
+c2s5648e2de8a80                                                               debug	Sending[c2s_unauthed]: <stream:features>
+mod_websocket                                                                 debug	Websocket received frame: opcode=1, 76 bytes
+runnerEi4UXVh5                                                                debug	creating new coroutine
+c2s5648e2de8a80                                                               debug	Received[c2s_unauthed]: <auth xmlns='urn:ietf:params:xml:ns:xmpp-sasl' mechanism='ANONYMOUS'>
+c2s5648e2de8a80                                                               info	Authenticated as ajq6tfhtzhqjotgc@[meet.example.org]
+[meet.example.org]:saslauth                                          debug	sasl reply: <success xmlns='urn:ietf:params:xml:ns:xmpp-sasl'/>
+c2s5648e2de8a80                                                               debug	Sending[c2s_unbound]: <success xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>
+mod_websocket                                                                 debug	Websocket received frame: opcode=1, 98 bytes
+c2s5648e2de8a80                                                               debug	Client sent opening <stream:stream> to [meet.example.org]
+c2s5648e2de8a80                                                               debug	Sending[c2s_unbound]: <open xmlns='urn:ietf:params:xml:ns:xmpp-framing' id='e0af039d-ded2-489c-a4f8-c6d841cde80a' from='[meet.example.org]' xml:lang='en' version='1.0'>
+c2s5648e2de8a80                                                               debug	Sent reply <stream:stream> to client
+c2s5648e2de8a80                                                               debug	Underlying connection does not support STARTTLS
+c2s5648e2de8a80                                                               debug	Sending[c2s_unbound]: <stream:features>
+mod_websocket                                                                 debug	Websocket received frame: opcode=1, 106 bytes
+c2s5648e2de8a80                                                               debug	Received[c2s_unbound]: <iq type='set' id='lwoyxqzrb8'>
+rostermanager                                                                 debug	load_roster: asked for: ajq6tfhtzhqjotgc@[meet.example.org]
+rostermanager                                                                 debug	load_roster: loading for new user: ajq6tfhtzhqjotgc@[meet.example.org]
+rostermanager                                                                 debug	load_roster: cache miss, loading from storage
+c2s5648e2de8a80                                                               debug	Sending[c2s]: <iq id='lwoyxqzrb8' type='result'>
+c2s5648e2de8a80                                                               debug	Resource bound: ajq6tfhtzhqjotgc@[meet.example.org]/F6PIN9Ou
+mod_websocket                                                                 debug	Websocket received frame: opcode=1, 45 bytes
+c2s5648e2de8a80                                                               debug	Received[c2s]: <enable xmlns='urn:xmpp:sm:3' resume='true'>
+[meet.example.org]:smacks                                            debug	Enabling stream management
+c2s5648e2de8a80                                                               debug	Sending[c2s]: <enabled id='6c2c5884-2450-4250-bbf7-a7c1dec2ef8a' resume='true' max='60' xmlns='urn:xmpp:sm:3'>
+mod_websocket                                                                 debug	Websocket received frame: opcode=1, 792 bytes
+c2s5648e2de8a80                                                               debug	Handled 1 incoming stanzas
+c2s5648e2de8a80                                                               debug	Received[c2s]: <iq id='8cexkzjr04' to='focus.[meet.example.org]' type='set'>
+focus.[meet.example.org]:client_proxy                                debug	received stanza from c2s session
+focus.[meet.example.org]:client_proxy                                debug	stanza to target: name = iq, type = set
+focus.[meet.example.org]:client_proxy                                debug	NAT-ed stanza: from: ajq6tfhtzhqjotgc@[meet.example.org]/F6PIN9Ou -> focus.[meet.example.org]/ajq6tfhtzhqjotgc@[meet.example.org]/F6PIN9Ou, to: focus.[meet.example.org] -> focus@auth.[meet.example.org]/focus
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <iq id='8cexkzjr04' type='set' to='focus@auth.[meet.example.org]/focus' from='focus.[meet.example.org]/ajq6tfhtzhqjotgc@[meet.example.org]/F6PIN9Ou'>
+c2s5648e32d7e90                                                               debug	Received[c2s]: <iq id='6BF81-10' to='conference.[meet.example.org]' type='get'>
+stanzarouter                                                                  debug	Could not route stanza to remote
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <iq id='6BF81-10' type='error' to='focus@auth.[meet.example.org]/focus' from='conference.[meet.example.org]'>
+server_epoll                                                                  debug	New connection FD 15 (100.64.0.80, 43406, 100.64.0.188, 5280)
+server_epoll                                                                  debug	Watching FD 15 (100.64.0.80, 43406, 100.64.0.188, 5280)
+http.server                                                                   debug	Firing event: GET /http-bind
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43406, 100.64.0.188, 5280) after writing
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43406, 100.64.0.188, 5280) now
+server_epoll                                                                  debug	Unwatched FD 15 (100.64.0.80, 43406, 100.64.0.188, 5280)
+server_epoll                                                                  debug	New connection FD 15 (100.64.0.80, 43408, 100.64.0.188, 5280)
+server_epoll                                                                  debug	Watching FD 15 (100.64.0.80, 43408, 100.64.0.188, 5280)
+http.server                                                                   debug	Firing event: GET /http-bind
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43408, 100.64.0.188, 5280) after writing
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43408, 100.64.0.188, 5280) now
+server_epoll                                                                  debug	Unwatched FD 15 (100.64.0.80, 43408, 100.64.0.188, 5280)
+c2s5648e3222b80                                                               debug	Received[c2s]: <presence to='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+internal-muc.auth.[meet.example.org]:muc                             debug	presence update for jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0 from session jvb@auth.[meet.example.org]/13EmkNnK
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <presence to='focus@auth.[meet.example.org]/focus' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e3222b80                                                               debug	Sending[c2s]: <presence to='jvb@auth.[meet.example.org]/13EmkNnK' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e32d7e90                                                               debug	Received[c2s]: <iq id='URRNU-295' to='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0' type='get'>
+internal-muc.auth.[meet.example.org]:muc                             debug	focus@auth.[meet.example.org]/focus sent private iq stanza to jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0 (jvb@auth.[meet.example.org]/13EmkNnK)
+c2s5648e3222b80                                                               debug	Sending[c2s]: <iq id='anZiQGF1dGgubWVldDYuc2NhbGluZy5qdXN0MW5vdDIub3JnLzEzRW1rTm5LAFVSUk5VLTI5NQDC2jfL7gkE6VJGPdp8MN2j' type='get' to='jvb@auth.[meet.example.org]/13EmkNnK' from='jvbbrewery@internal-muc.auth.[meet.example.org]/focus'>
+c2s5648e3222b80                                                               debug	Received[c2s]: <iq id='anZiQGF1dGgubWVldDYuc2NhbGluZy5qdXN0MW5vdDIub3JnLzEzRW1rTm5LAFVSUk5VLTI5NQDC2jfL7gkE6VJGPdp8MN2j' to='jvbbrewery@internal-muc.auth.[meet.example.org]/focus' type='result'>
+internal-muc.auth.[meet.example.org]:muc                             debug	jvb@auth.[meet.example.org]/13EmkNnK sent private iq stanza to jvbbrewery@internal-muc.auth.[meet.example.org]/focus (focus@auth.[meet.example.org]/focus)
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <iq id='URRNU-295' type='result' to='focus@auth.[meet.example.org]/focus' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e3222b80                                                               debug	Received[c2s]: <presence to='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+internal-muc.auth.[meet.example.org]:muc                             debug	presence update for jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0 from session jvb@auth.[meet.example.org]/13EmkNnK
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <presence to='focus@auth.[meet.example.org]/focus' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e3222b80                                                               debug	Sending[c2s]: <presence to='jvb@auth.[meet.example.org]/13EmkNnK' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+server_epoll                                                                  debug	New connection FD 15 (100.64.0.80, 43504, 100.64.0.188, 5280)
+server_epoll                                                                  debug	Watching FD 15 (100.64.0.80, 43504, 100.64.0.188, 5280)
+http.server                                                                   debug	Firing event: GET /http-bind
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43504, 100.64.0.188, 5280) after writing
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43504, 100.64.0.188, 5280) now
+server_epoll                                                                  debug	Unwatched FD 15 (100.64.0.80, 43504, 100.64.0.188, 5280)
+server_epoll                                                                  debug	New connection FD 15 (100.64.0.80, 43502, 100.64.0.188, 5280)
+server_epoll                                                                  debug	Watching FD 15 (100.64.0.80, 43502, 100.64.0.188, 5280)
+http.server                                                                   debug	Firing event: GET /http-bind
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43502, 100.64.0.188, 5280) after writing
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43502, 100.64.0.188, 5280) now
+server_epoll                                                                  debug	Unwatched FD 15 (100.64.0.80, 43502, 100.64.0.188, 5280)
+c2s5648e3222b80                                                               debug	Received[c2s]: <presence to='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+internal-muc.auth.[meet.example.org]:muc                             debug	presence update for jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0 from session jvb@auth.[meet.example.org]/13EmkNnK
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <presence to='focus@auth.[meet.example.org]/focus' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e3222b80                                                               debug	Sending[c2s]: <presence to='jvb@auth.[meet.example.org]/13EmkNnK' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e32d7e90                                                               debug	Received[c2s]: <iq id='URRNU-297' to='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0' type='get'>
+internal-muc.auth.[meet.example.org]:muc                             debug	focus@auth.[meet.example.org]/focus sent private iq stanza to jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0 (jvb@auth.[meet.example.org]/13EmkNnK)
+c2s5648e3222b80                                                               debug	Sending[c2s]: <iq id='anZiQGF1dGgubWVldDYuc2NhbGluZy5qdXN0MW5vdDIub3JnLzEzRW1rTm5LAFVSUk5VLTI5NwDC2jfL7gkE6VJGPdp8MN2j' type='get' to='jvb@auth.[meet.example.org]/13EmkNnK' from='jvbbrewery@internal-muc.auth.[meet.example.org]/focus'>
+c2s5648e3222b80                                                               debug	Received[c2s]: <iq id='anZiQGF1dGgubWVldDYuc2NhbGluZy5qdXN0MW5vdDIub3JnLzEzRW1rTm5LAFVSUk5VLTI5NwDC2jfL7gkE6VJGPdp8MN2j' to='jvbbrewery@internal-muc.auth.[meet.example.org]/focus' type='result'>
+internal-muc.auth.[meet.example.org]:muc                             debug	jvb@auth.[meet.example.org]/13EmkNnK sent private iq stanza to jvbbrewery@internal-muc.auth.[meet.example.org]/focus (focus@auth.[meet.example.org]/focus)
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <iq id='URRNU-297' type='result' to='focus@auth.[meet.example.org]/focus' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e3222b80                                                               debug	Received[c2s]: <presence to='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+internal-muc.auth.[meet.example.org]:muc                             debug	presence update for jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0 from session jvb@auth.[meet.example.org]/13EmkNnK
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <presence to='focus@auth.[meet.example.org]/focus' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e3222b80                                                               debug	Sending[c2s]: <presence to='jvb@auth.[meet.example.org]/13EmkNnK' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+server_epoll                                                                  debug	New connection FD 15 (100.64.0.80, 43604, 100.64.0.188, 5280)
+server_epoll                                                                  debug	Watching FD 15 (100.64.0.80, 43604, 100.64.0.188, 5280)
+http.server                                                                   debug	Firing event: GET /http-bind
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43604, 100.64.0.188, 5280) after writing
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43604, 100.64.0.188, 5280) now
+server_epoll                                                                  debug	Unwatched FD 15 (100.64.0.80, 43604, 100.64.0.188, 5280)
+server_epoll                                                                  debug	New connection FD 15 (100.64.0.80, 43602, 100.64.0.188, 5280)
+server_epoll                                                                  debug	Watching FD 15 (100.64.0.80, 43602, 100.64.0.188, 5280)
+http.server                                                                   debug	Firing event: GET /http-bind
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43602, 100.64.0.188, 5280) after writing
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43602, 100.64.0.188, 5280) now
+server_epoll                                                                  debug	Unwatched FD 15 (100.64.0.80, 43602, 100.64.0.188, 5280)
+c2s5648e3222b80                                                               debug	Received[c2s]: <presence to='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+internal-muc.auth.[meet.example.org]:muc                             debug	presence update for jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0 from session jvb@auth.[meet.example.org]/13EmkNnK
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <presence to='focus@auth.[meet.example.org]/focus' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e3222b80                                                               debug	Sending[c2s]: <presence to='jvb@auth.[meet.example.org]/13EmkNnK' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e31eed70                                                               debug	Received[c2s]: <iq id='r7qBy-109' to='auth.[meet.example.org]' type='get'>
+c2s5648e31eed70                                                               debug	Sending[c2s]: <iq id='r7qBy-109' type='result' to='jibri@auth.[meet.example.org]/_PfxZ0fe' from='auth.[meet.example.org]'>
+c2s5648e32d7e90                                                               debug	Received[c2s]: <iq id='URRNU-299' to='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0' type='get'>
+internal-muc.auth.[meet.example.org]:muc                             debug	focus@auth.[meet.example.org]/focus sent private iq stanza to jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0 (jvb@auth.[meet.example.org]/13EmkNnK)
+c2s5648e3222b80                                                               debug	Sending[c2s]: <iq id='anZiQGF1dGgubWVldDYuc2NhbGluZy5qdXN0MW5vdDIub3JnLzEzRW1rTm5LAFVSUk5VLTI5OQDC2jfL7gkE6VJGPdp8MN2j' type='get' to='jvb@auth.[meet.example.org]/13EmkNnK' from='jvbbrewery@internal-muc.auth.[meet.example.org]/focus'>
+c2s5648e3222b80                                                               debug	Received[c2s]: <iq id='anZiQGF1dGgubWVldDYuc2NhbGluZy5qdXN0MW5vdDIub3JnLzEzRW1rTm5LAFVSUk5VLTI5OQDC2jfL7gkE6VJGPdp8MN2j' to='jvbbrewery@internal-muc.auth.[meet.example.org]/focus' type='result'>
+internal-muc.auth.[meet.example.org]:muc                             debug	jvb@auth.[meet.example.org]/13EmkNnK sent private iq stanza to jvbbrewery@internal-muc.auth.[meet.example.org]/focus (focus@auth.[meet.example.org]/focus)
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <iq id='URRNU-299' type='result' to='focus@auth.[meet.example.org]/focus' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e2dab810                                                               debug	Received[c2s]: <iq id='UqLdL-107' to='auth.[meet.example.org]' type='get'>
+c2s5648e2dab810                                                               debug	Sending[c2s]: <iq id='UqLdL-107' type='result' to='jibri@auth.[meet.example.org]/pjRhtvTT' from='auth.[meet.example.org]'>
+c2s5648e3222b80                                                               debug	Received[c2s]: <presence to='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+internal-muc.auth.[meet.example.org]:muc                             debug	presence update for jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0 from session jvb@auth.[meet.example.org]/13EmkNnK
+c2s5648e32d7e90                                                               debug	Sending[c2s]: <presence to='focus@auth.[meet.example.org]/focus' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+c2s5648e3222b80                                                               debug	Sending[c2s]: <presence to='jvb@auth.[meet.example.org]/13EmkNnK' from='jvbbrewery@internal-muc.auth.[meet.example.org]/jvb-0'>
+mod_websocket                                                                 debug	Websocket received frame: opcode=1, 756 bytes
+c2s5648e2de8a80                                                               debug	Handled 2 incoming stanzas
+c2s5648e2de8a80                                                               debug	Received[c2s]: <presence to='jxs-test-16479393509449179-0@conference.[meet.example.org]/ajq6tfht'>
+stanzarouter                                                                  debug	Could not route stanza to remote
+c2s5648e2de8a80                                                               debug	Sending[c2s]: <presence type='error' to='ajq6tfhtzhqjotgc@[meet.example.org]/F6PIN9Ou' from='jxs-test-16479393509449179-0@conference.[meet.example.org]/ajq6tfht'>
+server_epoll                                                                  debug	New connection FD 15 (100.64.0.80, 43706, 100.64.0.188, 5280)
+server_epoll                                                                  debug	Watching FD 15 (100.64.0.80, 43706, 100.64.0.188, 5280)
+http.server                                                                   debug	Firing event: GET /http-bind
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43706, 100.64.0.188, 5280) after writing
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43706, 100.64.0.188, 5280) now
+server_epoll                                                                  debug	Unwatched FD 15 (100.64.0.80, 43706, 100.64.0.188, 5280)
+server_epoll                                                                  debug	New connection FD 15 (100.64.0.80, 43708, 100.64.0.188, 5280)
+server_epoll                                                                  debug	Watching FD 15 (100.64.0.80, 43708, 100.64.0.188, 5280)
+http.server                                                                   debug	Firing event: GET /http-bind
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43708, 100.64.0.188, 5280) after writing
+server_epoll                                                                  debug	Close FD 15 (100.64.0.80, 43708, 100.64.0.188, 5280) now
+server_epoll                                                                  debug
