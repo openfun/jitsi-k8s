@@ -21,6 +21,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Documentation on the choices made in this repo
 - Documentation on Octo
 - Documentation on jvb services and ports
+- Documentation on prosody tests
 
 ### Fixed
 
