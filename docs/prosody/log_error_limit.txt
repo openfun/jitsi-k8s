@@ -1,0 +1,7 @@
+focus.[meet.example.com]:client_proxy                                         debug	received stanza from c2s session
+focus.[meet.example.com]:client_proxy                                         debug	stanza to target: name = iq, type = error
+sessionmanager                                                                debug	All resources of bq298_rxt0fimwqe are now offline
+stanzarouter                                                                  debug	Could not route stanza to remote
+c2s557148c1cde0                                                               debug	mod_smacks hibernation timeout reached...
+c2s557148c1cde0                                                               debug	Destroying session for hibernating too long
+c2s557148c1cde0                                                               debug	Destroying session for zu51vily3ayv8vv8@[meet.example.com]/f_ioZwdB (zu51vily3ayv8vv8@[meet.example.com])
