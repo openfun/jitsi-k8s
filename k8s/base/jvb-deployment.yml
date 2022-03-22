@@ -13,7 +13,7 @@
 #   environment variable JVB_OCTO_PUBLIC_ADDRESS, which is populated with
 #   the fieldref status.podIP
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: jvb
   labels:
@@ -22,7 +22,6 @@ spec:
   selector:
     matchLabels:
       app: jvb
-  serviceName: jvb
   template:
     metadata:
       labels:
@@ -35,11 +34,6 @@ spec:
         - name: jvb
           image: "jitsi/jvb:stable-6865"
           imagePullPolicy: IfNotPresent
-          envFrom:
-            - configMapRef:
-                name: jitsi-common
-            - configMapRef:
-                name: jvb
            # Hook that waits for users to disconnect before
            # killing the pod
            # - option '-p' specifies the entrypoint process as
@@ -49,6 +43,11 @@ spec:
             preStop:
               exec:
                 command: ["/usr/share/jitsi-videobridge/graceful_shutdown.sh", "-p", "1", "-t", "3"]
+          envFrom:
+            - configMapRef:
+                name: jitsi-common
+            - configMapRef:
+                name: jvb
           env:
             - name: JVB_AUTH_USER
               valueFrom:
@@ -67,7 +66,7 @@ spec:
           ports:
             # The UDP port 10000 is exposed to the internet on the node
             # public IP address (using hostPort).
-            # That means only one JVB container can run per node.
+            # That means only one JVB container can run per node.  
             - name: rtp-udp
               hostPort: 10000
               containerPort: 10000
