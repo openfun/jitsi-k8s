@@ -47,7 +47,7 @@ resources:
   - jvb-hpa.yml
   - jvb-podmonitor.yml
   - jvb-service-account.yaml
-  - jvb-statefulset.yml
+  - jvb-deployment.yml
   - namespace.yml
   - prosody-deployment.yml
   - prosody-service.yml
