@@ -18,6 +18,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Deploy Jitsi dashboards on Grafana
 - Add dynamic pod deletion cost on JVB
 - Resource requests and limits on each pod
+- Documentation on the choices made in this repo
+- Documentation on Octo
+- Documentation on jvb services and ports
 
 ### Fixed
 
