@@ -66,7 +66,7 @@ spec:
           ports:
             # The UDP port 10000 is exposed to the internet on the node
             # public IP address (using hostPort).
-            # That means only one JVB container can run per node.  
+            # That means only one JVB container can run per node.
             - name: rtp-udp
               hostPort: 10000
               containerPort: 10000
@@ -84,11 +84,11 @@ spec:
               port: 8080
           resources:
             limits:
-              cpu: 3650m
-              memory: 14000Mi
+              cpu: 3400m
+              memory: 10000Mi
             requests:
-              cpu: 3650m
-              memory: 14000Mi
+              cpu: 3400m
+              memory: 10000Mi
         # Sidecar container that exports stats for Prometheus
         # Values are scraped by ./jvb-podmonitor.yml
         - name: exporter
@@ -112,7 +112,12 @@ spec:
             - "-videobridge-url"
             - "http://localhost:8080/colibri/stats"
           resources:
-            {}
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 30m
+              memory: 100Mi
         - image: python:3.8
           name: metadata-updater
           command: [ "python3" ]
@@ -120,6 +125,13 @@ spec:
           volumeMounts:
             - name: jvb-metadata-updater
               mountPath: /opt/jvb-metadata-updater
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 30m
+              memory: 100Mi
 
       nodeSelector:
         k8s.scaleway.com/pool-name: jvb
