@@ -91,7 +91,7 @@ resource "helm_release" "kube-prometheus-stack" {
     value = "Prometheus"
   }
 
-  depends_on = [ scaleway_k8s_pool.default, local_file.kubeconfig, scaleway_domain_record.grafana_domain_record ]
+  depends_on = [ scaleway_k8s_pool.default, helm_release.ingress-nginx, local_file.kubeconfig, scaleway_domain_record.grafana_domain_record ]
 }
 
 
