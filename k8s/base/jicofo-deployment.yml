@@ -44,5 +44,12 @@ spec:
           readinessProbe:
             tcpSocket:
               port: 8888
+          resources:
+            limits:
+              cpu: 400m
+              memory: 4000Mi
+            requests:
+              cpu: 200m
+              memory: 3000Mi
       nodeSelector:
         k8s.scaleway.com/pool-name: default

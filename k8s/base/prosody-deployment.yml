@@ -57,6 +57,13 @@ spec:
         volumeMounts:
         - name: prosody-data
           mountPath: /config/data
+        resources:
+          limits:
+            cpu: 400m
+            memory: 5000Mi
+          requests:
+            cpu: 200m
+            memory: 4000Mi
       nodeSelector:
         k8s.scaleway.com/pool-name: default
       restartPolicy: Always
