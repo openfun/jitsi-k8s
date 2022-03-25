@@ -22,6 +22,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Documentation on Octo
 - Documentation on jvb services and ports
 - Documentation on prosody tests
+- Autoscale frontend
 
 ### Fixed
 
