@@ -200,6 +200,10 @@ OVERLAYS_HOME=/tmp/my-overlays
 
 ```
 
+## Adding jwt auth
+
+This project is thought to allow delegating authentication to an external gateway like [jitsi magnify](https://github.com/openfun/jitsi-magnify) which uses JWT tokens to authenticate users. To activate this, you can change variables in the `jitsi-common.env` file of your overlay.  For example, to delegate authentication to [jitsi magnify](https://github.com/openfun/jitsi-magnify), change auth type to jwt, put auth_url to url of your external gateway, and set values for app_id and app_secret that will also be set to the same values in magnify.
+
 ## Secrets encryption
 
 If you store your overlays on a shared repository, you might want to encrypt

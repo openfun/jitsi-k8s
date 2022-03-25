@@ -23,4 +23,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix various typing errors
 - `bin/init-overlay` targets the right OVERLAYS_HOME
 
+## Changed
+
+- Rework env to make it easy to add jwt authentication
+
 [Unreleased]: https://github.com/openfun/jitsi-k8s
