@@ -9,6 +9,12 @@ resource "scaleway_k8s_cluster" "kube_cluster" {
       maintenance_window_start_hour = lookup(var.k8s_auto_upgrade_maintenance_window_start_hour, terraform.workspace, 3)
       maintenance_window_day = lookup(var.k8s_auto_upgrade_maintenance_window_day, terraform.workspace, "any")
    }
+
+   autoscaler_config {
+      scale_down_delay_after_add = lookup(var.k8s_autoscaler_scale_down_delay_after_add, terraform.workspace, "10m")
+      scale_down_unneeded_time = lookup(var.k8s_autoscaler_scale_down_unneeded_time, terraform.workspace, "10m")
+      max_graceful_termination_sec = lookup(var.k8s_autoscaler_max_graceful_termination_sec, terraform.workspace, 2147483647)
+  }
 }
 
 # In this cluster, we create 2 nodepools :
