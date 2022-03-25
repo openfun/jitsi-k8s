@@ -24,6 +24,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Documentation on jvb services and ports
 - Documentation on prosody tests
 - Autoscale frontend
+- Configure cluster autoscaler
 
 ### Fixed
 
