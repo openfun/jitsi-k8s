@@ -42,6 +42,7 @@ resources:
   - jibri-service-account.yaml
   - jicofo-deployment.yml
   - jitsi-meet-front-deployment.yml
+  - jitsi-meet-front-hpa.yml
   - jitsi-meet-front-ingress.yml
   - jitsi-meet-front-service.yml
   - jvb-hpa.yml
