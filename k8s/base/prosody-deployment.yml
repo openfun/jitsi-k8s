@@ -59,11 +59,11 @@ spec:
           mountPath: /config/data
         resources:
           limits:
-            cpu: 400m
-            memory: 5000Mi
+            cpu: 3300m
+            memory: 15000Mi
           requests:
-            cpu: 200m
-            memory: 4000Mi
+            cpu: 3000m
+            memory: 14000Mi
       nodeSelector:
         k8s.scaleway.com/pool-name: default
       restartPolicy: Always

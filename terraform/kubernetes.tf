@@ -30,11 +30,11 @@ resource "scaleway_k8s_cluster" "kube_cluster" {
 
 resource "scaleway_k8s_pool" "default" {
    autohealing         = lookup(var.k8s_nodepool_autohealing, terraform.workspace, true)
-   autoscaling         = false
+   autoscaling         = true
    cluster_id          = scaleway_k8s_cluster.kube_cluster.id
    container_runtime   = lookup(var.k8s_nodepool_container_runtime, terraform.workspace, "containerd")
-   max_size            = lookup(var.k8s_jibri_nodepool_max_nodes, terraform.workspace, 5)
-   min_size            = lookup(var.k8s_jibri_nodepool_min_nodes, terraform.workspace, 1)
+   max_size            = lookup(var.k8s_jibri_nodepool_max_nodes, terraform.workspace, 12)
+   min_size            = lookup(var.k8s_jibri_nodepool_min_nodes, terraform.workspace, 3)
    name                = "default"
    node_type           = lookup(var.k8s_default_nodepool_flavor, terraform.workspace, "GP1-XS")
    size                = lookup(var.k8s_default_nodepool_size, terraform.workspace, 1)
@@ -65,8 +65,8 @@ resource "scaleway_k8s_pool" "jvb" {
    autoscaling         = lookup(var.k8s_jvb_nodepool_autoscale, terraform.workspace, true)
    cluster_id          = scaleway_k8s_cluster.kube_cluster.id
    container_runtime   = lookup(var.k8s_nodepool_container_runtime, terraform.workspace, "containerd")
-   max_size            = lookup(var.k8s_jvb_nodepool_max_nodes, terraform.workspace, 5)
-   min_size            = lookup(var.k8s_jvb_nodepool_min_nodes, terraform.workspace, 1)
+   max_size            = lookup(var.k8s_jvb_nodepool_max_nodes, terraform.workspace, 90)
+   min_size            = lookup(var.k8s_jvb_nodepool_min_nodes, terraform.workspace, 20)
    name                = "jvb"
    node_type           = lookup(var.k8s_jvb_nodepool_flavor, terraform.workspace, "GP1-XS")
    size                = lookup(var.k8s_jvb_nodepool_size, terraform.workspace, 1)

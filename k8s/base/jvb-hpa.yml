@@ -7,25 +7,12 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: jvb
-  minReplicas: 1
-  maxReplicas: 5
+  minReplicas: 20
+  maxReplicas: 90
   behavior:
     # We'll allow to scale down 20% of the pods every 30s
     scaleDown:
       stabilizationWindowSeconds: 60
-      policies:
-        - type: Percent
-          value: 20
-          periodSeconds: 30
-    # We allow to add 2 pods every 2 minutes.
-    # FIXME: Adjust this value when cluster autoscaler is enabled.
-    # It should give enough time to provision new nodes, but not too much
-    # to be able to scale-up in case of high demand.
-    scaleUp:
-      policies:
-        - type: Pods
-          value: 2
-          periodSeconds: 120
   metrics:
     - type: Resource
       resource:

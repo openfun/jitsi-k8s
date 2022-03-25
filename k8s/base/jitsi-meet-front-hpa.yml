@@ -8,7 +8,7 @@ spec:
     kind: Deployment
     name: jitsi-meet-front
   minReplicas: 2
-  maxReplicas: 5
+  maxReplicas: 15
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 60
