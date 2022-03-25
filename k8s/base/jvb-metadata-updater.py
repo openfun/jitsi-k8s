@@ -20,7 +20,7 @@ from urllib import request
 # Time to wait between each jvb status check
 from urllib.error import HTTPError, URLError
 
-update_period_seconds = os.getenv("UPDATE_PERIOD_SECONDS", 5)
+update_period_seconds = os.getenv("UPDATE_PERIOD_SECONDS", 60)
 
 # -- JVB
 # URL to colibri API
