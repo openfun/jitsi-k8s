@@ -134,6 +134,14 @@ variable "k8s_nodepool_container_runtime" {
 
 # `default` nodepool settings
 
+variable "k8s_default_nodepool_autoscale" {
+  type = map(bool)
+  description = "Enables the pool autoscaling feature"
+
+  default = {
+  }
+}
+
 variable "k8s_default_nodepool_flavor" {
   type = map(string)
   description = "Flavor name of the instances that will be created for the node pool"
@@ -146,9 +154,25 @@ variable "k8s_default_nodepool_flavor" {
   }
 }
 
+variable "k8s_default_nodepool_min_nodes" {
+  type = map(number)
+  description = "Minimum number of nodes allowed in the default node pool"
+
+  default = {
+  }
+}
+
+variable "k8s_default_nodepool_max_nodes" {
+  type = map(number)
+  description = "Maximum number of nodes allowed in the default node pool"
+
+  default = {
+  }
+}
+
 variable "k8s_default_nodepool_size" {
   type = map(number)
-  description = "Number of nodes desired in the default pool"
+  description = "Desired pool size. This value will only be used at creation if autoscaling is enabled."
 
   default = {
   }
