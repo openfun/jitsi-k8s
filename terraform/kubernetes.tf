@@ -33,6 +33,8 @@ resource "scaleway_k8s_pool" "default" {
    autoscaling         = false
    cluster_id          = scaleway_k8s_cluster.kube_cluster.id
    container_runtime   = lookup(var.k8s_nodepool_container_runtime, terraform.workspace, "containerd")
+   max_size            = lookup(var.k8s_jibri_nodepool_max_nodes, terraform.workspace, 5)
+   min_size            = lookup(var.k8s_jibri_nodepool_min_nodes, terraform.workspace, 1)
    name                = "default"
    node_type           = lookup(var.k8s_default_nodepool_flavor, terraform.workspace, "GP1-XS")
    size                = lookup(var.k8s_default_nodepool_size, terraform.workspace, 1)
