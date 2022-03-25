@@ -28,7 +28,8 @@ spec:
         app: jvb
     spec:
       serviceAccountName: jvb
-      # in case there is a long running conference on a JVB that should be shut down, give it time to finish
+      # In case there is a long running conference on a JVB that should be shut down, give it time to finish
+      # It should be equal to the cluster variable max_graceful_termination_sec
       terminationGracePeriodSeconds: 2147483647
       containers:
         - name: jvb
