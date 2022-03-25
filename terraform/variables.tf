@@ -81,6 +81,33 @@ variable "k8s_auto_upgrade_maintenance_window_day" {
   }
 }
 
+variable "k8s_autoscaler_scale_down_delay_after_add" {
+  type = map(string)
+  description = "How long after scale up that scale down evaluation resumes."
+
+  default = {
+  }
+}
+
+variable "k8s_autoscaler_scale_down_unneeded_time" {
+  type = map(string)
+  description = "How long a node should be unneeded before it is eligible for scale down."
+
+  default = {
+  }
+}
+
+variable "k8s_autoscaler_max_graceful_termination_sec" {
+  type = map(string)
+  description = "Maximum number of seconds the cluster autoscaler waits for pod termination when trying to scale down a node."
+
+  # It should be equal to the terminationGracePeriodSeconds variable on
+  # the JVB deployment.
+
+  default = {
+  }
+}
+
 # Global Kubernetes nodepool settings
 
 variable "k8s_nodepool_autohealing" {
