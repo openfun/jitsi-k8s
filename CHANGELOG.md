@@ -44,5 +44,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Octo strategy is now RegionBased by default
 - Use statefulset instead of deployment for jvb
 - Autoscale JVB pool according to CPU
+- Adapt scaledown node delay to Scaleway pricing
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
