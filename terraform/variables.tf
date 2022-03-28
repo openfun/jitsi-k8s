@@ -85,6 +85,9 @@ variable "k8s_autoscaler_scale_down_delay_after_add" {
   type = map(string)
   description = "How long after scale up that scale down evaluation resumes."
 
+  # Given that Scaleway charges for at least an hour for every node that
+  # is created, it should be set to a value slightly inferior to 1 hour.
+
   default = {
   }
 }
