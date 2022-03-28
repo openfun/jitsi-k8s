@@ -46,5 +46,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Use deployment instead of statefulset for jvb
 - Autoscale JVB pool according to CPU
 - Adapt scaledown node delay to Scaleway pricing
+- Modify bridge stress threshold
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
