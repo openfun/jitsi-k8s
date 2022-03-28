@@ -25,19 +25,22 @@ STABILIZATION_WINDOW_SECONDS_DOWN = 300
 HPA_SYNC_PERIOD = 15
 
 # Initial number of pods
-INITIAL_REPLICAS = 15
-
-# Readiness delay for new pods on new nodes
-READINESS_DELAY = 240
-
-# Deletion delay for pods
-DELETION_DELAY = 20
+INITIAL_REPLICAS = 5
 
 # Minimum number of pods for the replicaset
 HPA_MIN_REPLICA = 0
 
 # Maximum number of pods for the replicaset (= 0 to disable)
 HPA_MAX_REPLICA = 0
+
+# Readiness delay for new pods on new nodes
+# This includes time for nodes to be created and ready
+# as well as time for pods to become ready
+READINESS_DELAY = 240
+
+# Deletion delay for pods
+# At the beginning of this deletion delay, pod is not taken into account in the HPA
+DELETION_DELAY = 20
 
 # Duration of the simulation (in seconds)
 SIMULATION_DURATION = 4000
@@ -113,7 +116,7 @@ for i in range(len(t)):
 
     # Compute overload & instant usage
     overload.append(load[-1] - load_real[-1])
-    usage.append(load_real[-1] / replicas_real[-1])
+    usage.append((load_real[-1] / replicas_real[-1])*100)
 
     # Make HPA computations only if it a multiple of `HPA_SYNC_PERIOD`
     if i % HPA_SYNC_PERIOD == 0:
@@ -178,21 +181,24 @@ for i in range(len(t)):
         replicas_real[-1] += pods_scheduled[-DELETION_DELAY - 1]
 
 
-_, axis = plt.subplots(3, 2)
+_, axis = plt.subplots(3, 2, constrained_layout=True)
 colors = ['red', 'blue', 'green', 'purple']
 
-def add_plots(treatement_lists, title, plot_id):
+def add_plots(treatement_lists, title, y_label, plot_id, labels = []):
     axis[plot_id[0], plot_id[1]].set_title(title)
     for i in range(len(treatement_lists)):
-        axis[plot_id[0], plot_id[1]].plot(t, treatement_lists[i][-SIMULATION_DURATION:], colors[i])
+        axis[plot_id[0], plot_id[1]].plot(t,treatement_lists[i][-SIMULATION_DURATION:], colors[i])
+    if labels:
+        axis[plot_id[0], plot_id[1]].legend(labels)
+    axis[plot_id[0], plot_id[1]].set_ylabel(y_label)    
 
 
-add_plots([load, load_real], f"Applied ({colors[0]}) & real ({colors[1]}) loads", [0, 0])
-add_plots([replicas_instant_calc], "Instant number of pods (computed with HPA algorithm)" , [0, 1])
-add_plots([pods_scheduled], "Number of new pods scheduled", [1, 0])
-add_plots([replicas_real, replicas_total], f"Number of active ({colors[0]}) and total ({colors[1]}) pods on the cluster", [1, 1])
-add_plots([usage], "Usage of the cluster", [2, 0])
-add_plots([overload], "Overload (= deterioration of quality)", [2, 1])
+add_plots([load, load_real], "Load as number of equivalent pods", "Pods", [0, 0], ["Applied load", "Load handled by cluster"])
+add_plots([replicas_instant_calc], "Instant number of pods needed for load", "Pods", [0, 1])
+add_plots([pods_scheduled], "Number of new pods scheduled", "Pods", [1, 0])
+add_plots([replicas_real, replicas_total], "Pods on the cluster", "Pods", [1, 1], ["Pods in ready state", "Pods asked for by hpa"])
+add_plots([usage*100], "Usage of the cluster", "Percentage", [2, 0])
+add_plots([overload], "Overload (= deterioration of quality)","Load lost", [2, 1])
 
 # Display plots
 print("Launching the graph window...")
