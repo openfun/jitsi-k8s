@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# Ratio of target utilization of pods as stated in `resource.target.averageUtilization` 
+# Ratio of target utilization of pods as stated in `resource.target.averageUtilization`
 # ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-resource-metrics
 TARGET = 0.7
 
@@ -32,6 +32,12 @@ READINESS_DELAY = 240
 
 # Deletion delay for pods
 DELETION_DELAY = 20
+
+# Minimum number of pods for the replicaset
+HPA_MIN_REPLICA = 0
+
+# Maximum number of pods for the replicaset (= 0 to disable)
+HPA_MAX_REPLICA = 0
 
 # Duration of the simulation (in seconds)
 SIMULATION_DURATION = 4000
@@ -113,7 +119,10 @@ for i in range(len(t)):
     if i % HPA_SYNC_PERIOD == 0:
         # Compute the instant number of replicas according to HPA algorithm
         # ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#algorithm-details
-        replicas_instant_calc.append(math.ceil(load_real[-1] / TARGET))
+        new_replicas_instant = max(math.ceil(load_real[-1] / TARGET), HPA_MIN_REPLICA)
+        if HPA_MAX_REPLICA != 0:
+            new_replicas_instant = min(new_replicas_instant, HPA_MAX_REPLICA)
+        replicas_instant_calc.append(new_replicas_instant)
 
         # Select if a scale up or scale down should be done
         # Scale up and down are only triggered if all values in the stabilization window are in the same direction
@@ -157,7 +166,7 @@ for i in range(len(t)):
     else:
         replicas_instant_calc.append(replicas_instant_calc[-1])
         pods_scheduled.append(0)
-    
+
     # Computes new number of total replicas
     replicas_total.append(replicas_total[-1] + pods_scheduled[-1])
 
