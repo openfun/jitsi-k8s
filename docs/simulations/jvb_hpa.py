@@ -49,6 +49,11 @@ DELETION_DELAY = int(os.getenv("DELETION_DELAY", "20"))
 # Duration of the simulation (in seconds)
 SIMULATION_DURATION = int(os.getenv("SIMULATION_DURATION", "3600"))
 
+# Pricing interval and charge per instance
+# The `PRICING_CHARGE_PER_INTERVAL` is charged even though the instance does not exist during the whole interval
+PRICING_INTERVAL = int(os.getenv("PRICING_INTERVAL", "3600"))
+PRICING_AMOUNT_PER_INTERVAL = float(os.getenv("PRICING_AMOUNT_PER_INTERVAL", "0.084"))
+
 ### LOAD MODELS ###
 # Model function of participant load to apply
 # All return values are in equivalent-pod unit
@@ -84,6 +89,16 @@ max_past_time = max(STABILIZATION_WINDOW_SECONDS_UP, STABILIZATION_WINDOW_SECOND
 
 # Maximum delay to consider when initializing number of scheduled pods
 max_delay = max(READINESS_DELAY, DELETION_DELAY)
+
+# Lists of instance creation times
+# The `best` one corresponds to the case FIFO
+# The `worst` one corresponds to the case FILO
+best_creation_times = [0 for i in range(INITIAL_REPLICAS)]
+worst_creation_times = [0 for i in range(INITIAL_REPLICAS)]
+
+# Total pricing that corresponds to the previous cases
+best_pricing = INITIAL_REPLICAS * PRICING_AMOUNT_PER_INTERVAL
+worst_pricing = INITIAL_REPLICAS * PRICING_AMOUNT_PER_INTERVAL
 
 # Initialization of treatment lists
 # In each list L, L[-i] constitutes the value of L at t-i+1 seconds
@@ -185,6 +200,27 @@ for i in range(len(t)):
         replicas_real[-1] += pods_scheduled[-READINESS_DELAY - 1]
     if pods_scheduled[-DELETION_DELAY - 1] < 0:
         replicas_real[-1] += pods_scheduled[-DELETION_DELAY - 1]
+    
+    # Update lists of instance creation times
+    if pods_scheduled[-1] > 0:
+        # If the number of replicas increases, directly add the pricing
+        best_pricing += pods_scheduled[-1] * PRICING_AMOUNT_PER_INTERVAL
+        worst_pricing += pods_scheduled[-1] * PRICING_AMOUNT_PER_INTERVAL
+        for p in range(pods_scheduled[-1]):
+            best_creation_times.append(i)
+            worst_creation_times.append(i)
+    elif pods_scheduled[-1] < 0:
+        for p in range(-pods_scheduled[-1]):
+            best_creation_times.pop(-1)
+            worst_creation_times.pop(0)
+    
+    # Increase the pricings with old instances that have existed durint one more `PRICING_INTERVAL`
+    for j in range(len(best_creation_times)):
+        if best_creation_times[j] != 0 and best_creation_times[j] % PRICING_INTERVAL == 0:
+            print(best_pricing)
+            best_pricing += PRICING_AMOUNT_PER_INTERVAL
+        if worst_creation_times[j] != 0 and worst_creation_times[j] % PRICING_INTERVAL == 0:
+            worst_pricing += PRICING_AMOUNT_PER_INTERVAL
 
 
 _, axis = plt.subplots(3, 2, constrained_layout=True)
@@ -205,6 +241,14 @@ add_plots([pods_scheduled], "Number of new pods scheduled", "Pods", [1, 0])
 add_plots([replicas_real, replicas_total], "Pods on the cluster", "Pods", [1, 1], ["Pods in ready state", "Pods asked for by hpa"])
 add_plots([usage*100], "Usage of the cluster", "Proportion", [2, 0])
 add_plots([overload], "Overload (= deterioration of quality)","Load lost", [2, 1])
+
+# Display pricings
+print(
+f"""
+Estimated pricing:
+  * best case: {math.ceil(worst_pricing * 100) / 100} €
+  * worst case: {math.ceil(best_pricing * 100) / 100} €
+""")
 
 # Display plots
 print("Launching the graph window...")
