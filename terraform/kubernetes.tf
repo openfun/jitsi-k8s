@@ -12,7 +12,7 @@ resource "scaleway_k8s_cluster" "kube_cluster" {
 
    autoscaler_config {
       # How long after scale up that scale down evaluation resumes.
-      scale_down_delay_after_add = lookup(var.k8s_autoscaler_scale_down_delay_after_add, terraform.workspace, "10m")
+      scale_down_delay_after_add = lookup(var.k8s_autoscaler_scale_down_delay_after_add, terraform.workspace, "40m")
 
       # How long a node should be unneeded before it is eligible for scale down.
       scale_down_unneeded_time = lookup(var.k8s_autoscaler_scale_down_unneeded_time, terraform.workspace, "10m")
