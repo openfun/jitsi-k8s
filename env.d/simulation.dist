@@ -32,6 +32,11 @@ DELETION_DELAY=20
 # Duration of the simulation (in seconds)
 SIMULATION_DURATION=3600
 
+# Pricing interval and charge per instance
+# The `PRICING_CHARGE_PER_INTERVAL` is charged even though the instance does not exist during the whole interval
+PRICING_INTERVAL=3600
+PRICING_AMOUNT_PER_INTERVAL=0.084
+
 ### LOAD MODELS ###
 # Model function of participant load to apply
 # All return values are in equivalent-pod unit
