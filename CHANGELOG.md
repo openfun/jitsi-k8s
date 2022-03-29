@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Terraform project to create a K8S cluster on scaleway
 - Kustomize project to deploy jitsi on K8S
+- Example to override images name and tag
 
 ### Fixed
 

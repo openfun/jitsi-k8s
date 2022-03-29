@@ -11,6 +11,18 @@ configMapGenerator:
     envs:
       - ./jitsi-common.env
 
+images:
+  - name: fundocker/jibri-pulseaudio
+    newTag: main
+  - name: jitsi/jicofo
+    newTag: stable-7001
+  - name: jitsi/web
+    newTag: stable-7001
+  - name: jitsi/jvb
+    newTag: stable-7001
+  - name: jitsi/prosody
+    newTag: stable-7001
+
 generators:
   - ./secret-generator.yaml
 
