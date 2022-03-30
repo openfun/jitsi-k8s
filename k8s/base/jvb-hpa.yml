@@ -7,7 +7,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: jvb
-  minReplicas: 20
+  minReplicas: 1
   maxReplicas: 90
   behavior:
     # We'll allow to scale down 20% of the pods every 30s
