@@ -1,0 +1,53 @@
+# Ratio of target utilization of pods as stated in `resource.target.averageUtilization`
+# ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-resource-metrics
+TARGET=0.75
+
+# Stabilization windows as stated in `behavior.scaleUp/scaleDown.stabilizationWindowSeconds`
+# ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#stabilization-window
+STABILIZATION_WINDOW_SECONDS_UP=0
+STABILIZATION_WINDOW_SECONDS_DOWN=60
+
+# Period between two HPA calls (default is 15)
+# ref: https://predictive-horizontal-pod-autoscaler.readthedocs.io/en/latest/user-guide/sync-period/
+HPA_SYNC_PERIOD=15
+
+# Initial number of pods
+INITIAL_REPLICAS=10
+
+# Minimum number of pods for the replicaset
+HPA_MIN_REPLICA=1
+
+# Maximum number of pods for the replicaset (= 0 to disable)
+HPA_MAX_REPLICA=0
+
+# Readiness delay for new pods on new nodes
+# This includes time for nodes to be created and ready
+# as well as time for pods to become ready
+READINESS_DELAY=240
+
+# Deletion delay for pods
+# At the beginning of this deletion delay, pod is not taken into account in the HPA
+DELETION_DELAY=20
+
+# Duration of the simulation (in seconds)
+SIMULATION_DURATION=3600
+
+### LOAD MODELS ###
+# Model function of participant load to apply
+# All return values are in equivalent-pod unit
+
+# Initial load
+LOAD_INITIAL_VALUE=7.5
+
+# Linear model
+LOAD_LINEAR_SLOPE=0.015
+
+# Sinusoidal model
+LOAD_SINUSOIDAL_AMPLITUDE=3
+LOAD_SINUSOIDAL_PERIOD=1800
+
+# Load model to use
+# Currently available options are:
+# - LINEAR_LOAD_MODEL (default)
+# - SINUSOIDAL_LOAD_MODEL
+LOAD_MODEL=LINEAR_LOAD_MODEL
