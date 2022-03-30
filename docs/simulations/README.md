@@ -2,6 +2,11 @@
 
 Script `jvb_hpa.py` enables users to see load on cluster, HPA reaction, and possible deterioriation of quality, based on a function of user load.
 
+To install the script requirements, just launch:
+```bash
+python3 -m pip install -r requirements.txt
+```
+
 Many parameters come into account, both HPA and cluster parameters.
 User load should be the base of the analysis: this script is made to see cluster reaction to a specific load, so that we can adapt values (like number of initial pods or stabilizationWindow) for a more appropriate reaction.
 
