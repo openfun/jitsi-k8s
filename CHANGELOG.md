@@ -46,5 +46,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Autoscale JVB pool according to CPU
 - Adapt scaledown node delay to Scaleway pricing
 - Modify bridge stress threshold
+- Modify max bridge participants
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
