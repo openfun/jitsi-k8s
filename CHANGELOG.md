@@ -48,5 +48,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Adapt scaledown node delay to Scaleway pricing
 - Modify bridge stress threshold
 - Modify max bridge participants
+- Increase front worker connections
 
 [Unreleased]: https://github.com/openfun/jitsi-k8s
