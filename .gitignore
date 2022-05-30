@@ -1,5 +1,6 @@
 env.d/terraform
 env.d/kustomize
+env.d/simulation
 
 # Terraform
 .terraform

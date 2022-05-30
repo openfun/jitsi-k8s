@@ -1,0 +1,38 @@
+Room name:jxs-test-16479393509449179-0
+status connecting wss://[meet.example.org]/xmpp-websocket?room=jxs-test-16479393509449179-0
+status connect 
+status opening 
+status open <open xmlns="urn:ietf:params:xml:ns:xmpp-framing" id="dd6db66f-95c6-43a3-8528-73aeb7b30de7" version="1.0" xml:lang="en" from="[meet.example.org]"/>
+IN
+<stream:features xmlns:stream="http://etherx.jabber.org/streams" xmlns="http://etherx.jabber.org/streams"><mechanisms xmlns="urn:ietf:params:xml:ns:xmpp-sasl"><mechanism>ANONYMOUS</mechanism></mechanisms></stream:features>
+OUT
+<auth xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism="ANONYMOUS"><hidden xmlns="xmpp.js"/></auth>
+IN
+<success xmlns="urn:ietf:params:xml:ns:xmpp-sasl"/>
+status opening 
+status open <open xmlns="urn:ietf:params:xml:ns:xmpp-framing" id="e0af039d-ded2-489c-a4f8-c6d841cde80a" version="1.0" xml:lang="en" from="[meet.example.org]"/>
+IN
+<stream:features xmlns:stream="http://etherx.jabber.org/streams" xmlns="http://etherx.jabber.org/streams"><c xmlns="http://jabber.org/protocol/caps" node="http://prosody.im" ver="jUPw+feqk2J9ZxZZXxeGx2BZDyg=" hash="sha-1"/><bind xmlns="urn:ietf:params:xml:ns:xmpp-bind"><required/></bind><session xmlns="urn:ietf:params:xml:ns:xmpp-session"><optional/></session><ver xmlns="urn:xmpp:features:rosterver"/><sm xmlns="urn:xmpp:sm:2"><optional/></sm><sm xmlns="urn:xmpp:sm:3"><optional/></sm></stream:features>
+OUT
+<iq type="set" id="lwoyxqzrb8" xmlns="jabber:client"><bind xmlns="urn:ietf:params:xml:ns:xmpp-bind"/></iq>
+IN
+<iq id="lwoyxqzrb8" type="result" xmlns="jabber:client"><bind xmlns="urn:ietf:params:xml:ns:xmpp-bind"><jid>ajq6tfhtzhqjotgc@[meet.example.org]/F6PIN9Ou</jid></bind></iq>
+OUT
+<enable xmlns="urn:xmpp:sm:3" resume="true"/>
+IN
+<enabled id="6c2c5884-2450-4250-bbf7-a7c1dec2ef8a" resume="true" max="60" xmlns="urn:xmpp:sm:3"/>
+status online ajq6tfhtzhqjotgc@[meet.example.org]/F6PIN9Ou
+Participant 1 from jxs-test-16479393509449179-0 room:  is online!
+Participant 1 from jxs-test-16479393509449179-0 room:  is inviting jicofo to the room
+OUT
+<iq to="focus.[meet.example.org]" type="set" xmlns="jabber:client" id="8cexkzjr04"><conference machine-uid="ajq6tfhtzhqjotgc" room="jxs-test-16479393509449179-0@conference.[meet.example.org]" xmlns="http://jitsi.org/protocol/focus"><property name="channelLastN" value="-1"/><property name="disableRtx" value="false"/><property name="enableTcc" value="true"/><property name="enableRemb" value="true"/><property name="enableLipSync" value="false"/><property name="startBitrate" value="800"/><property name="octo" value="true"/><property name="openSctp" value="false"/><property name="startAudioMuted" value="999"/><property name="startVideoMuted" value="999"/><property name="stereo" value="true"/><property name="useRoomAsSharedDocumentName" value="false"/></conference></iq>
+Error [TimeoutError]
+    at /Users/just1/Developer/jxs/dist/main.js:1:43769
+    at async c.request (/Users/just1/Developer/jxs/dist/main.js:1:65205)
+    at async h._inviteJicofo (/Users/just1/Developer/jxs/dist/main.js:1:101018)
+    at async h._onOnline (/Users/just1/Developer/jxs/dist/main.js:1:99658)
+Participant 1 from jxs-test-16479393509449179-0 room:  is joining!
+OUT
+<presence to="jxs-test-16479393509449179-0@conference.[meet.example.org]/ajq6tfht" xmlns="jabber:client"><x xmlns="http://jabber.org/protocol/muc"/><stats-id>Adeline-2mY</stats-id><region id="us-east-1" xmlns="http://jitsi.org/jitsi-meet"/><c hash="sha-1" node="http://jitsi.org/jitsimeet" ver="cvjWXufsg4xT62Ec2mlATkFZ9lk=" xmlns="http://jabber.org/protocol/caps"/><jitsi_participant_region>us-east-1</jitsi_participant_region><avatar-id>e8b7ee7bbac3a53f14a711b538526bf3</avatar-id><nick xmlns="http://jabber.org/protocol/nick"/><audiomuted xmlns="http://jitsi.org/jitmeet/audio">false</audiomuted><videoType xmlns="http://jitsi.org/jitmeet/video">camera</videoType><videomuted xmlns="http://jitsi.org/jitmeet/video">false</videomuted></presence>
+IN
+<presence xmlns="jabber:client" type="error" to="ajq6tfhtzhqjotgc@[meet.example.org]/F6PIN9Ou" from="jxs-test-16479393509449179-0@conference.[meet.example.org]/ajq6tfht"><error type="cancel"><not-allowed xmlns="urn:ietf:params:xml:ns:xmpp-stanzas"/><text xmlns="urn:ietf:params:xml:ns:xmpp-stanzas">Communication with remote domains is not enabled</text></error></presence>

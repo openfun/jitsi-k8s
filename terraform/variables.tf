@@ -81,6 +81,36 @@ variable "k8s_auto_upgrade_maintenance_window_day" {
   }
 }
 
+variable "k8s_autoscaler_scale_down_delay_after_add" {
+  type = map(string)
+  description = "How long after scale up that scale down evaluation resumes."
+
+  # Given that Scaleway charges for at least an hour for every node that
+  # is created, it should be set to a value slightly inferior to 1 hour.
+
+  default = {
+  }
+}
+
+variable "k8s_autoscaler_scale_down_unneeded_time" {
+  type = map(string)
+  description = "How long a node should be unneeded before it is eligible for scale down."
+
+  default = {
+  }
+}
+
+variable "k8s_autoscaler_max_graceful_termination_sec" {
+  type = map(string)
+  description = "Maximum number of seconds the cluster autoscaler waits for pod termination when trying to scale down a node."
+
+  # It should be equal to the terminationGracePeriodSeconds variable on
+  # the JVB deployment.
+
+  default = {
+  }
+}
+
 # Global Kubernetes nodepool settings
 
 variable "k8s_nodepool_autohealing" {
@@ -107,6 +137,14 @@ variable "k8s_nodepool_container_runtime" {
 
 # `default` nodepool settings
 
+variable "k8s_default_nodepool_autoscale" {
+  type = map(bool)
+  description = "Enables the pool autoscaling feature"
+
+  default = {
+  }
+}
+
 variable "k8s_default_nodepool_flavor" {
   type = map(string)
   description = "Flavor name of the instances that will be created for the node pool"
@@ -119,9 +157,25 @@ variable "k8s_default_nodepool_flavor" {
   }
 }
 
+variable "k8s_default_nodepool_min_nodes" {
+  type = map(number)
+  description = "Minimum number of nodes allowed in the default node pool"
+
+  default = {
+  }
+}
+
+variable "k8s_default_nodepool_max_nodes" {
+  type = map(number)
+  description = "Maximum number of nodes allowed in the default node pool"
+
+  default = {
+  }
+}
+
 variable "k8s_default_nodepool_size" {
   type = map(number)
-  description = "Number of nodes desired in the default pool"
+  description = "Desired pool size. This value will only be used at creation if autoscaling is enabled."
 
   default = {
   }

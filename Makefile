@@ -18,6 +18,7 @@ build: ## build the app container
 bootstrap: ## Bootstrap the jitsi-k8s project
 bootstrap: \
 	env.d/kustomize \
+	env.d/simulation \
 	env.d/terraform
 
 env.d/terraform:
@@ -25,6 +26,9 @@ env.d/terraform:
 
 env.d/kustomize:
 	cp env.d/kustomize.dist env.d/kustomize
+
+env.d/simulation:
+	cp env.d/simulation.dist env.d/simulation
 
 k8s-apply-config: ## Build and deploy the Kubernetes configuration for jitsi
 	@$(KUSTOMIZE) /data/k8s/overlays/$(JITSI_K8S_ENV) > k8s/.k8s-built-config
@@ -35,6 +39,9 @@ k8s-build-config: ## Build and display the Kubernetes configuration for jitsi
 	@$(KUSTOMIZE) /data/k8s/overlays/$(JITSI_K8S_ENV)
 .PHONY: k8s-build-config
 
+simulation: ## Simulate the functioning of the HPA on the JVB ReplicaSet
+	python3 docs/simulations/jvb_hpa.py
+.PHONY: simulation
 
 help:
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
