@@ -34,7 +34,7 @@ spec:
     spec:
       serviceAccountName: jibri
       containers:
-      - image: fundocker/jibri-pulseaudio:main
+      - image: jitsi/jibri:stable-7648-4
         name: jibri
         imagePullPolicy: Always
         livenessProbe:
