@@ -87,7 +87,7 @@ def update_pod_metadata(pod_deletion_cost):
     )
     response = request.urlopen(patch_request, context=ssl_context)
     if response.getcode() != 200:
-        raise HTTPError(jibri_health_api, response.getcode(), "Unexpected response code", headers, None)
+        raise HTTPError(colibri_api, response.getcode(), "Unexpected response code", headers, None)
 
 
 def get_pod_deletion_cost(stats):
