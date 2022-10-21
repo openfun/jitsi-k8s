@@ -93,7 +93,7 @@ spec:
         # Sidecar container that exports stats for Prometheus
         # Values are scraped by ./jvb-podmonitor.yml
         - name: exporter
-          image: systemli/prometheus-jitsi-meet-exporter:1.1.9
+          image: systemli/prometheus-jitsi-meet-exporter:1.2.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 5
