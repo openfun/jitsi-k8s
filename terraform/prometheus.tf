@@ -29,7 +29,7 @@ resource "helm_release" "kube-prometheus-stack" {
   }
 
   # Add Jitsi-Meet dashboards to Grafana
-  # Dashboards are fetched from https://github.com/systemli/prometheus-jitsi-meet-exporter/tree/1.1.9/dashboards
+  # Dashboards are fetched from https://github.com/systemli/prometheus-jitsi-meet-exporter/tree/1.2.0/dashboards
   # Values are merged with https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
   set {
     name = "grafana.dashboardProviders.dashboardproviders\\.yaml.apiVersion"
@@ -53,7 +53,7 @@ resource "helm_release" "kube-prometheus-stack" {
 
   set {
     name = "grafana.dashboards.jitsi.jitsi-meet.url"
-    value = "https://raw.githubusercontent.com/systemli/prometheus-jitsi-meet-exporter/1.1.9/dashboards/jitsi-meet.json"
+    value = "https://raw.githubusercontent.com/systemli/prometheus-jitsi-meet-exporter/1.2.0/dashboards/jitsi-meet.json"
   }
 
   set {
@@ -63,7 +63,7 @@ resource "helm_release" "kube-prometheus-stack" {
 
   set {
     name = "grafana.dashboards.jitsi.jitsi-meet-system.url"
-    value = "https://raw.githubusercontent.com/systemli/prometheus-jitsi-meet-exporter/1.1.9/dashboards/jitsi-meet-system.json"
+    value = "https://raw.githubusercontent.com/systemli/prometheus-jitsi-meet-exporter/1.2.0/dashboards/jitsi-meet-system.json"
   }
 
   set {
