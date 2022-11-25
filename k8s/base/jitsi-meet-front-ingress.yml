@@ -10,6 +10,7 @@ metadata:
   annotations:
     cert-manager.io/issuer: "letsencrypt-jitsi-issuer"
 spec:
+  ingressClassName: "nginx"
   rules:
   - host: "placeholder.domain.example"
     http:
