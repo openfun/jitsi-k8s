@@ -271,3 +271,13 @@ variable "k8s_jvb_nodepool_size" {
   default = {
   }
 }
+
+
+variable "k8s_ingress_nginx_version" {
+  type = map(string)
+  description = "ingress-nginx version to install"
+
+  default = {
+    preprod = "3.39.0"
+  }
+}
