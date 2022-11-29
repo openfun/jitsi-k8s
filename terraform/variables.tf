@@ -281,3 +281,29 @@ variable "k8s_ingress_nginx_version" {
     preprod = "3.39.0"
   }
 }
+
+variable "k8s_grafana_ingress_enabled" {
+  type = map(bool)
+  description = "enable ingress for grafana UI"
+
+  default = {
+  }
+}
+
+variable "k8s_grafana_ingress_host" {
+  type = map(string)
+  description = "host to reach grafana admin"
+
+  default = {
+    preprod="grafana.preprod.exemple.com"
+  }
+}
+
+variable "k8s_grafana_admin_passord" {
+  type = map(string)
+  description = "grafana admin password"
+
+  default = {
+    preprod="this is an invalid password"
+  }
+}
