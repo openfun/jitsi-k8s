@@ -34,7 +34,7 @@ spec:
     spec:
       serviceAccountName: jibri
       containers:
-      - image: jitsi/jibri:stable-7648-4
+      - image: jitsi/jibri:stable-8044
         name: jibri
         imagePullPolicy: Always
         livenessProbe:
