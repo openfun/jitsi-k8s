@@ -33,7 +33,7 @@ spec:
       terminationGracePeriodSeconds: 2147483647
       containers:
         - name: jvb
-          image: "jitsi/jvb:stable-7648-4"
+          image: "jitsi/jvb:stable-8044"
           imagePullPolicy: IfNotPresent
            # Hook that waits for users to disconnect before
            # killing the pod
