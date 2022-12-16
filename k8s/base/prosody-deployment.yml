@@ -16,7 +16,7 @@ spec:
         app: prosody
     spec:
       containers:
-      - image: jitsi/prosody:stable-7648-4
+      - image: jitsi/prosody:stable-8044
         name: prosody
         imagePullPolicy: IfNotPresent
         livenessProbe:
@@ -57,6 +57,8 @@ spec:
         volumeMounts:
         - name: prosody-data
           mountPath: /config/data
+        - name: prosody-register
+          mountPath: /prosody-register
         resources:
           limits:
             cpu: 3300m
@@ -70,3 +72,6 @@ spec:
       volumes:
         - name: prosody-data
           emptyDir: {}
+        - name: prosody-register
+          configMap:
+            name: prosody-register

@@ -5,13 +5,16 @@ images:
   - name: fundocker/jibri-pulseaudio
     newTag: main
   - name: jitsi/jicofo
-    newTag: stable-6865
+    newTag: stable-8044
   - name: jitsi/web
-    newTag: stable-6865
+    newTag: stable-8138
   - name: jitsi/jvb
-    newTag: stable-6865
+    newTag: stable-8044
   - name: jitsi/prosody
-    newTag: stable-6865
+    newTag: stable-8044
+  - name: alphacep/kaldi-en
+    newTag: latest
+
 
 resources:
   - ../../base

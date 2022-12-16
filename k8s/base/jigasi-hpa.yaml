@@ -1,0 +1,63 @@
+# With this Horizontal Pod Autoscaler, we want to ensure that there is
+# always at least:
+#  - a specific count of jigasi pods available (TARGET_MIN_VALUE)
+#  - a specific percentage of jigasi pods available across all jigasi pods (TARGET_PERCENT)
+#
+# The formula applied by HPA to compute the desired replicas is :
+# desiredReplicas = ceil[currentReplicas * ( currentMetricValue / desiredMetricValue )]
+# (see https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#algorithm-details)
+#
+# If multiple metrics are specified in HPA, the formula is applied for each of
+# them and the higher desiredReplicas is taken into account.
+#
+# To guarantee that we always have at least TARGET_MIN_VALUE pods available, we
+# just have to set this value as minReplicas because the Deployment manages
+# only available jigasis. When a jigasi pod is busy, it gets orphaned and is
+# ignored by the Deployment.
+#
+# To ensure that we have a certain percentage of available pods
+# (TARGET_PERCENT), a rule is defined in this HPA based on the "jigasi_busy"
+# metric, which takes into account all jigasi pods in the namespace (those
+# managed by the deployment + the orphaned pods that are busy)
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: jigasi-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: jigasi
+  minReplicas: 2
+  maxReplicas: 10
+  behavior:
+    # We'll allow to scale down 20% of the pods every 30s
+    scaleDown:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 20
+          periodSeconds: 30
+    # We allow to add 2 pods every 2 minutes.
+    # FIXME: Adjust this value when cluster autoscaler is enabled.
+    # It should give enough time to provision new nodes, but not too much
+    # to be able to scale-up in case of high demand.
+    scaleUp:
+      policies:
+        - type: Pods
+          value: 2
+          periodSeconds: 120
+  metrics:
+    - type: Object
+      object:
+        metric:
+          name: jigasi_busy
+        describedObject:
+          apiVersion: v1
+          kind: Namespace
+          name: jitsi
+        target:
+          type: Value
+          # We want to always have at least 20% of available jigasi instances.
+          value: 0.8

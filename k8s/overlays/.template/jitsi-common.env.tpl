@@ -19,6 +19,9 @@ XMPP_MUC_DOMAIN=muc.${BASE_DOMAIN}
 # XMPP domain for the jibri recorder
 XMPP_RECORDER_DOMAIN=recorder.${BASE_DOMAIN}
 
+# Jigasi SIP URI for jigasi and jicofo.
+JIGASI_SIP_URI=jigasi@recorder.${BASE_DOMAIN}
+
 ## Authentication
 
 # Enable authentication

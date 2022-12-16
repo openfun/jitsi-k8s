@@ -66,6 +66,24 @@ resource "scaleway_k8s_pool" "jibri" {
    depends_on = [ scaleway_k8s_pool.default ]
 }
 
+resource "scaleway_k8s_pool" "jigasi" {
+   autohealing         = lookup(var.k8s_nodepool_autohealing, terraform.workspace, true)
+   autoscaling         = lookup(var.k8s_jigasi_nodepool_autoscale, terraform.workspace, true)
+   cluster_id          = scaleway_k8s_cluster.kube_cluster.id
+   container_runtime   = lookup(var.k8s_nodepool_container_runtime, terraform.workspace, "containerd")
+   max_size            = lookup(var.k8s_jigasi_nodepool_max_nodes, terraform.workspace, 5)
+   min_size            = lookup(var.k8s_jigasi_nodepool_min_nodes, terraform.workspace, 1)
+   name                = "jigasi"
+   node_type           = lookup(var.k8s_jigasi_nodepool_flavor, terraform.workspace, "GP1-S")
+   size                = lookup(var.k8s_jigasi_nodepool_size, terraform.workspace, 1)
+   wait_for_pool_ready = false
+
+   # We wait for default pool to be ready before creating the jibri pool,
+   # otherwise some kube-system pods created by scaleway might be scheduled
+   # on the jibri pool at cluster initialization
+   depends_on = [ scaleway_k8s_pool.default ]
+}
+
 resource "scaleway_k8s_pool" "jvb" {
    autohealing         = lookup(var.k8s_nodepool_autohealing, terraform.workspace, true)
    autoscaling         = lookup(var.k8s_jvb_nodepool_autoscale, terraform.workspace, true)

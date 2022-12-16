@@ -11,5 +11,8 @@ JIBRI_RECORDER_PASSWORD=${JIBRI_RECORDER_PASSWORD}
 # XMPP user for Jibri client connections.
 JIBRI_XMPP_PASSWORD=${JIBRI_XMPP_PASSWORD}
 
+#XMPP password for Jigasi client connections
+JIGASI_XMPP_PASSWORD=${JIGASI_XMPP_PASSWORD}
+
 # Secret used to sign/verify JWT tokens
 # JWT_APP_SECRET=my_app_secret
