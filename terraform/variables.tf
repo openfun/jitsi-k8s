@@ -227,6 +227,51 @@ variable "k8s_jibri_nodepool_size" {
   }
 }
 
+# `jigasi` nodepool settings
+
+
+variable "k8s_jigasi_nodepool_autoscale" {
+  type = map(bool)
+  description = "Enables the pool autoscaling feature"
+
+  default = {
+  }
+}
+
+variable "k8s_jigasi_nodepool_flavor" {
+  type = map(string)
+  description = "Flavor name of the instances that will be created in the jibri node pool"
+
+  default = {
+    preprod = "DEV1-L"
+  }
+}
+
+variable "k8s_jigasi_nodepool_min_nodes" {
+  type = map(number)
+  description = "Minimum number of nodes allowed in the jibri node pool"
+
+  default = {
+  }
+}
+
+variable "k8s_jigasi_nodepool_max_nodes" {
+  type = map(number)
+  description = "Maximum number of nodes allowed in the jibri node pool"
+
+  default = {
+    preprod = 2
+  }
+}
+
+variable "k8s_jigasi_nodepool_size" {
+  type = map(number)
+  description = "Desired pool size. This value will only be used at creation if autoscaling is enabled."
+
+  default = {
+  }
+}
+
 # `jvb` nodepool settings
 
 

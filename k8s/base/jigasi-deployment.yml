@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jigasi
+  name: jigasi
+spec:
+  selector:
+    matchLabels:
+      app: jigasi
+# The goal of this matchExpressions selector is to exclude the jigasi
+# pods with a label status=busy from their ReplicaSet.
+# A sidecar container (metadata-updater) is updating the status
+# label according to jibri's state.
+#
+# This mechanism drastically reduces the risk of terminating
+# a busy jibri pod when scaling down the deployment.
+#
+# For more details :
+# https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#isolating-pods-from-a-replicaset
+    matchExpressions:
+      - {key: status, operator: In, values: [idle, unknown]}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+      labels:
+        app: jigasi
+        status: idle
+    spec:
+      serviceAccountName: jigasi
+      containers:
+      - image: annagrigoriu/testing:jigasi-transcription-final
+        name: jigasi
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 20000
+          protocol: UDP
+        - containerPort: 8788
+          name: api
+          protocol: TCP
+        envFrom:
+          - configMapRef:
+              name: jitsi-common
+          - configMapRef:
+              name: jigasi
+        env:
+          - name: JIGASI_XMPP_USER
+            valueFrom:
+              secretKeyRef:
+                name: jitsi-secrets
+                key: JIGASI_XMPP_USER
+          - name: JIGASI_XMPP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: jitsi-secrets
+                key: JIGASI_XMPP_PASSWORD
+        volumeMounts:
+        - name: jigasi-transcripts
+          mountPath: /tmp/transcripts
+      - image: python:3.8
+        name: metadata-updater
+        command: ["/bin/sh","-c"]
+        args: [ "pip install websockets && python3 opt/jigasi-metadata-updater/jigasi-metadata-updater.py"]
+        volumeMounts:
+        - name: jigasi-metadata-updater
+          mountPath: /opt/jigasi-metadata-updater
+      - image: alphacep/kaldi-en:latest
+        name: vosk-en
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 2700
+      nodeSelector:
+        k8s.scaleway.com/pool-name: jigasi
+      volumes:
+        - name: jigasi-transcripts
+          emptyDir: {}
+        - name: jigasi-metadata-updater
+          configMap:
+            name: jigasi-metadata-updater

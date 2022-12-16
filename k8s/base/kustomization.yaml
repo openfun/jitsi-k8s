@@ -5,6 +5,9 @@ configMapGenerator:
   - name: jibri
     envs:
       - ./env/jibri.env
+  - name: jigasi
+    envs:
+      - ./env/jigasi.env
   - name: jitsi-common
     envs:
       - ./env/jitsi-common.env
@@ -26,6 +29,12 @@ configMapGenerator:
   - name: jvb-metadata-updater
     files:
       - ./jvb-metadata-updater.py
+  - name: jigasi-metadata-updater
+    files:
+      - ./jigasi-metadata-updater.py
+  - name: prosody-register
+    files:
+      - ./prosody-register.sh
 
 namespace: jitsi
 
@@ -40,6 +49,9 @@ resources:
   - jibri-hpa.yaml
   - jibri-podmonitor.yml
   - jibri-service-account.yaml
+  - jigasi-deployment.yml
+  - jigasi-hpa.yaml
+  - jigasi-service-account.yaml
   - jicofo-deployment.yml
   - jitsi-meet-front-deployment.yml
   - jitsi-meet-front-hpa.yml
